@@ -329,40 +329,12 @@ body {
 
 .module-content-wrapper { flex: 1; min-width: 0; }
 
-.theme-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--card-bg);
-  border: 2px solid var(--cf-orange);
-  cursor: pointer;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  color: var(--text-primary);
-  box-shadow: var(--shadow-subtle);
-}
-
-.theme-toggle:hover {
-  transform: scale(1.1);
-  box-shadow: var(--shadow-orange);
-  border-color: var(--cf-orange-light);
-}
-
-.theme-toggle svg { width: 24px; height: 24px; }
-
 @media (max-width: 768px) {
   .module-wrapper { flex-direction: column; }
   .sidebar { width: 100%; position: static; max-height: none; }
   .header-content { flex-direction: column; text-align: center; gap: 15px; }
   .logo-icon { font-size: 40px; }
   .header-text h1 { font-size: 1.5em; }
-  .theme-toggle { top: auto; right: 15px; bottom: 15px; z-index: 1001; }
   .container { padding: 15px; }
   .module-header, .module-content, .module-card { padding: 20px; }
 }
@@ -371,7 +343,7 @@ body {
   <body>
     <BackgroundEffects />
     <Header title={title} description={description} />
-    <ThemeToggle client:load />
+    <ThemeToggle />
     <main class="container">
       <slot />
     </main>

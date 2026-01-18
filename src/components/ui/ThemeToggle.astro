@@ -59,14 +59,28 @@
     transform: rotate(0) scale(1);
   }
 
-  [data-theme="dark"] .theme-icon.moon {
+  .theme-icon.moon {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0);
+  }
+
+  :global([data-theme="dark"]) .theme-icon.moon {
     opacity: 1;
     transform: rotate(0) scale(1);
   }
 
-  [data-theme="dark"] .theme-icon.sun {
+  :global([data-theme="dark"]) .theme-icon.sun {
     opacity: 0;
     transform: rotate(180deg) scale(0);
+  }
+
+  @media (max-width: 768px) {
+    .theme-toggle {
+      top: auto;
+      right: 15px;
+      bottom: 15px;
+      z-index: 1001;
+    }
   }
 </style>
 
