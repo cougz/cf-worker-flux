@@ -1,0 +1,139 @@
+---
+interface Props {
+  type: 'success' | 'error' | 'warning' | 'info';
+  title?: string;
+  message: string;
+  dismissible?: boolean;
+}
+
+const {
+  type,
+  title,
+  message,
+  dismissible = false,
+} = Astro.props;
+
+const icons = {
+  success: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+  error: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+  warning: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+  info: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>',
+};
+
+const colors = {
+  success: { bg: '#dcfce7', border: '#22c55e', text: '#166534' },
+  error: { bg: '#fee2e2', border: '#ef4444', text: '#991b1b' },
+  warning: { bg: '#fef3c7', border: '#f59e0b', text: '#92400e' },
+  info: { bg: '#dbeafe', border: '#3b82f6', text: '#1e40af' },
+};
+---
+
+<div class="alert alert-{type}" data-dismissible={dismissible}>
+  <div class="alert-icon" set:html={icons[type]} />
+  <div class="alert-content">
+    {title && <h4 class="alert-title">{title}</h4>}
+    <p class="alert-message">{message}</p>
+  </div>
+  {dismissible && (
+    <button class="alert-dismiss" aria-label="Dismiss alert">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  )}
+</div>
+
+<style>
+  .alert {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--alert-border);
+    background: var(--alert-bg);
+    position: relative;
+  }
+
+  .alert-success {
+    --alert-bg: #dcfce7;
+    --alert-border: #22c55e;
+    --alert-text: #166534;
+  }
+
+  .alert-error {
+    --alert-bg: #fee2e2;
+    --alert-border: #ef4444;
+    --alert-text: #991b1b;
+  }
+
+  .alert-warning {
+    --alert-bg: #fef3c7;
+    --alert-border: #f59e0b;
+    --alert-text: #92400e;
+  }
+
+  .alert-info {
+    --alert-bg: #dbeafe;
+    --alert-border: #3b82f6;
+    --alert-text: #1e40af;
+  }
+
+  .alert-icon {
+    flex-shrink: 0;
+    color: var(--alert-text);
+    margin-top: 2px;
+  }
+
+  .alert-content {
+    flex: 1;
+  }
+
+  .alert-title {
+    font-weight: 600;
+    color: var(--alert-text);
+    margin: 0 0 4px 0;
+    font-size: 0.875rem;
+  }
+
+  .alert-message {
+    color: var(--alert-text);
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .alert-dismiss {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--alert-text);
+    opacity: 0.6;
+    transition: opacity var(--transition-fast);
+  }
+
+  .alert-dismiss:hover {
+    opacity: 1;
+  }
+
+  .alert[data-dismissible="true"] {
+    padding-right: 36px;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.alert-dismiss').forEach((button) => {
+    button.addEventListener('click', () => {
+      const alert = button.closest('.alert');
+      if (alert) {
+        alert.style.opacity = '0';
+        alert.style.transform = 'translateX(100%)';
+        setTimeout(() => alert.remove(), 300);
+      }
+    });
+  });
+</script>

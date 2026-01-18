@@ -1,0 +1,114 @@
+---
+interface Props {
+  title: string;
+  collapsible?: boolean;
+  defaultCollapsed?: boolean;
+  badge?: string;
+}
+
+const {
+  title,
+  collapsible = false,
+  defaultCollapsed = false,
+  badge,
+} = Astro.props;
+const id = `panel-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div class={`panel ${collapsible ? 'panel-collapsible' : ''}`} data-collapsed={defaultCollapsed} data-panel-id={id}>
+  <div class="panel-header" data-panel-header>
+    <h3 class="panel-title">{title}</h3>
+    {badge && <span class="panel-badge">{badge}</span>}
+    {collapsible && (
+      <button class="panel-toggle" aria-label="Toggle panel">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+    )}
+  </div>
+  <div class="panel-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .panel {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .panel-title {
+    flex: 1;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .panel-badge {
+    padding: 4px 12px;
+    background: var(--cf-orange);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .panel-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--text-secondary);
+    transition: transform var(--transition-fast);
+  }
+
+  .panel-toggle:hover {
+    color: var(--cf-orange);
+  }
+
+  .panel[data-collapsed="true"] .panel-toggle {
+    transform: rotate(-90deg);
+  }
+
+  .panel-content {
+    padding: 20px;
+    transition: all var(--transition-base);
+    overflow: hidden;
+  }
+
+  .panel[data-collapsed="true"] .panel-content {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+</style>
+
+<script define:vars={{ id, collapsible }}>
+  if (!collapsible) return;
+
+  const panel = document.querySelector(`[data-panel-id="${id}"]`);
+  const header = panel?.querySelector('[data-panel-header]');
+  const toggle = panel?.querySelector('.panel-toggle');
+
+  if (panel && header && toggle) {
+    header.addEventListener('click', () => {
+      const isCollapsed = panel.getAttribute('data-collapsed') === 'true';
+      panel.setAttribute('data-collapsed', (!isCollapsed).toString());
+    });
+  }
+</script>

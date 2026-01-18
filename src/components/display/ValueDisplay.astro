@@ -1,0 +1,147 @@
+---
+interface Props {
+  label: string;
+  value: any;
+  format?: 'text' | 'json' | 'code' | 'number';
+  status?: 'success' | 'error' | 'warning' | 'info';
+}
+
+const {
+  label,
+  value,
+  format = 'text',
+  status,
+} = Astro.props;
+
+const formattedValue = format === 'json' ? JSON.stringify(value, null, 2) : String(value);
+const statusColors = {
+  success: 'text-green-600',
+  error: 'text-red-600',
+  warning: 'text-yellow-600',
+  info: 'text-blue-600',
+};
+---
+
+<div class="value-display-wrapper">
+  <label class="value-display-label">{label}</label>
+  <div class={`value-display value-display-${format} ${status ? statusColors[status] : ''}`}>
+    {format === 'json' || format === 'code' ? (
+      <pre class="value-display-code"><code>{formattedValue}</code></pre>
+    ) : (
+      <span class="value-display-text">{formattedValue}</span>
+    )}
+    <button class="value-display-copy" title="Copy to clipboard" data-value={formattedValue}>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .value-display-wrapper {
+    margin-bottom: 16px;
+  }
+
+  .value-display-label {
+    display: block;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+  }
+
+  .value-display {
+    position: relative;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .value-display-text {
+    flex: 1;
+    font-family: inherit;
+    color: var(--text-primary);
+    word-break: break-word;
+  }
+
+  .value-display-code {
+    flex: 1;
+    margin: 0;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    overflow-x: auto;
+  }
+
+  .value-display-code code {
+    background: none;
+    padding: 0;
+  }
+
+  .value-display-copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--bg-tertiary);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 6px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    opacity: 0;
+    transition: all var(--transition-fast);
+  }
+
+  .value-display:hover .value-display-copy {
+    opacity: 1;
+  }
+
+  .value-display-copy:hover {
+    background: var(--cf-orange);
+    color: white;
+  }
+
+  .text-green-600 .value-display-text,
+  .text-green-606 .value-display-code {
+    color: #16a34a;
+  }
+
+  .text-red-600 .value-display-text,
+  .text-red-600 .value-display-code {
+    color: #dc3545;
+  }
+
+  .text-yellow-600 .value-display-text,
+  .text-yellow-600 .value-display-code {
+    color: #ca8a04;
+  }
+
+  .text-blue-600 .value-display-text,
+  .text-blue-600 .value-display-code {
+    color: #2563eb;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.value-display-copy').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const value = button.getAttribute('data-value');
+      if (value) {
+        try {
+          await navigator.clipboard.writeText(value);
+          button.setAttribute('title', 'Copied!');
+          setTimeout(() => button.setAttribute('title', 'Copy to clipboard'), 2000);
+        } catch (err) {
+          console.error('Failed to copy:', err);
+        }
+      }
+    });
+  });
+</script>
