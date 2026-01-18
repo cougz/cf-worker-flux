@@ -1,0 +1,25 @@
+---
+import DashboardLayout from '../../../layouts/DashboardLayout.astro';
+import Sidebar from '../../../components/layout/Sidebar.astro';
+import AlertBox from '../../../components/display/AlertBox.astro';
+---
+
+<DashboardLayout title="Cache Statistics" description="View cache performance metrics">
+  <div class="module-wrapper">
+    <Sidebar />
+    <div class="module-content-wrapper">
+      <div class="module-content">
+        <div class="module-header">
+          <h1>Cache Statistics</h1>
+          <p>View cache hit rates and performance metrics</p>
+        </div>
+
+        <AlertBox
+          type="info"
+          title="Coming Soon"
+          message="Cache statistics functionality will be available soon."
+        />
+      </div>
+    </div>
+  </div>
+</DashboardLayout>

@@ -1,0 +1,25 @@
+---
+import DashboardLayout from '../../../layouts/DashboardLayout.astro';
+import Sidebar from '../../../components/layout/Sidebar.astro';
+import AlertBox from '../../../components/display/AlertBox.astro';
+---
+
+<DashboardLayout title="Purge Cache" description="Clear cached content">
+  <div class="module-wrapper">
+    <Sidebar />
+    <div class="module-content-wrapper">
+      <div class="module-content">
+        <div class="module-header">
+          <h1>Purge Cache</h1>
+          <p>Clear cached content from your Cloudflare servers</p>
+        </div>
+
+        <AlertBox
+          type="info"
+          title="Coming Soon"
+          message="Cache purge functionality will be available soon."
+        />
+      </div>
+    </div>
+  </div>
+</DashboardLayout>

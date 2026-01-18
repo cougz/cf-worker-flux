@@ -1,11 +1,11 @@
 ---
 const sections = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'resources', label: 'Resources' },
-  { id: 'configuration', label: 'Configuration' },
-  { id: 'analytics', label: 'Analytics' },
-  { id: 'caching', label: 'Caching' },
-  { id: 'settings', label: 'Settings' },
+  { id: 'overview', label: 'Overview', path: '/' },
+  { id: 'resources', label: 'Resources', path: '/dashboard/resources' },
+  { id: 'configuration', label: 'Configuration', path: '/dashboard/configuration' },
+  { id: 'analytics', label: 'Analytics', path: '/dashboard/analytics' },
+  { id: 'caching', label: 'Caching', path: '/dashboard/caching' },
+  { id: 'settings', label: 'Settings', path: '/dashboard/settings' },
 ];
 ---
 
@@ -15,7 +15,7 @@ const sections = [
     {sections.map((section) => (
       <li>
         <a
-          href={`/dashboard/${section.id}`}
+          href={section.path}
           data-section={section.id}
           class=""
         >
@@ -88,14 +88,16 @@ const sections = [
 </style>
 
 <script>
-  const links = document.querySelectorAll('[data-section]');
-  const currentPath = window.location.pathname;
-  const currentSection = currentPath.split('/').pop() || 'overview';
+  document.addEventListener('DOMContentLoaded', () => {
+    const links = document.querySelectorAll('[data-section]');
+    const currentPath = window.location.pathname;
+    const currentSection = currentPath.split('/').pop() || 'overview';
 
-  links.forEach((link) => {
-    const section = link.getAttribute('data-section');
-    if (section === currentSection) {
-      link.classList.add('active');
-    }
+    links.forEach((link) => {
+      const section = link.getAttribute('data-section');
+      if (section === currentSection) {
+        link.classList.add('active');
+      }
+    });
   });
 </script>

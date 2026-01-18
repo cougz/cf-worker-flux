@@ -212,99 +212,31 @@ const config = section && sectionConfig[section] ? sectionConfig[section] : { ti
 
         {section === 'caching' && (
           <>
-            <Panel title="Cache Rule Configuration">
-              <div class="cache-rule-form">
-                <Input
-                  id="zone-id"
-                  label="Zone ID"
-                  type="text"
-                  placeholder="e.g., abc123456789def"
-                  required
-                />
-
-                <Input
-                  id="ruleset-id"
-                  label="Ruleset ID"
-                  type="text"
-                  placeholder="e.g., def456789012ghi"
-                  required
-                />
-
-                <Input
-                  id="rule-id"
-                  label="Rule ID"
-                  type="text"
-                  placeholder="e.g., ghi789012345jkl"
-                  required
-                />
-
-                <Input
-                  id="api-token"
-                  label="API Token"
-                  type="password"
-                  placeholder="Enter your Cloudflare API token"
-                  required
-                />
-
-                <div class="flex gap-4 mt-4">
-                  <button
-                    id="check-status-btn"
-                    class="button button-secondary"
-                  >
-                    Check Current Status
-                  </button>
-                </div>
+            <div class="module-list">
+              <div class="module-card" onclick='window.location.href="/dashboard/caching/manage"'>
+                <div class="module-card-icon">🔄</div>
+                <h3 class="module-card-title">Enable/Disable Cache Rule</h3>
+                <p class="module-card-description">Toggle cache rules on and off</p>
               </div>
-            </Panel>
 
-            <div id="cache-rule-status-panel" class="hidden">
-              <Panel title="Current Rule Status" badge="Live">
-                <div class="status-display">
-                  <div class="status-item">
-                    <span class="status-label">Rule ID:</span>
-                    <span class="status-value" id="status-rule-id">-</span>
-                  </div>
+              <div class="module-card" onclick='window.location.href="/dashboard/caching/purge"'>
+                <div class="module-card-icon">🗑️</div>
+                <h3 class="module-card-title">Purge Cache</h3>
+                <p class="module-card-description">Clear cached content</p>
+              </div>
 
-                  <div class="status-item">
-                    <span class="status-label">Status:</span>
-                    <span class="status-value" id="status-enabled">-</span>
-                  </div>
+              <div class="module-card" onclick='window.location.href="/dashboard/caching/statistics"'>
+                <div class="module-card-icon">📈</div>
+                <h3 class="module-card-title">Cache Statistics</h3>
+                <p class="module-card-description">View cache hit rates and performance</p>
+              </div>
 
-                  <div class="status-item">
-                    <span class="status-label">Description:</span>
-                    <span class="status-value" id="status-description">-</span>
-                  </div>
-
-                  <div class="status-item">
-                    <span class="status-label">Last Updated:</span>
-                    <span class="status-value" id="status-updated">-</span>
-                  </div>
-                </div>
-
-                <div class="flex gap-4 mt-4">
-                  <button
-                    id="enable-rule-btn"
-                    class="button button-success"
-                    style="display: none;"
-                  >
-                    Enable Rule
-                  </button>
-                  <button
-                    id="disable-rule-btn"
-                    class="button button-danger"
-                    style="display: none;"
-                  >
-                    Disable Rule
-                  </button>
-                </div>
-              </Panel>
+              <div class="module-card" onclick='window.location.href="/dashboard/caching/analytics"'>
+                <div class="module-card-icon">📊</div>
+                <h3 class="module-card-title">Cache Analytics</h3>
+                <p class="module-card-description">Detailed caching analytics and reports</p>
+              </div>
             </div>
-
-            <AlertBox
-              type="info"
-              title="Cache Rules"
-              message="Manage your Cloudflare cache rules by providing the Zone ID, Ruleset ID, and Rule ID. Your API token is stored in browser session storage and is cleared when you close the tab."
-            />
           </>
         )}
       </div>
@@ -320,48 +252,6 @@ const config = section && sectionConfig[section] ? sectionConfig[section] : { ti
     margin-bottom: 16px;
   }
 
-  .cache-rule-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .status-display {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .status-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .status-label {
-    font-weight: 600;
-    color: var(--text-secondary);
-  }
-
-  .status-value {
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  .status-value.enabled {
-    color: #10b981;
-  }
-
-  .status-value.disabled {
-    color: #ef4444;
-  }
-
-  .hidden {
-    display: none !important;
-  }
-
   @media (max-width: 768px) {
     .analytics-grid {
       grid-template-columns: 1fr 1fr;
@@ -369,160 +259,3 @@ const config = section && sectionConfig[section] ? sectionConfig[section] : { ti
   }
   </style>
 
-{section === 'caching' && (
-  <script>
-    import stateManager from '../../scripts/state-manager';
-
-    let currentStatus: any = null;
-
-    function loadInputs() {
-      const stored = sessionStorage.getItem('cache_rule_inputs');
-      if (stored) {
-        const inputs = JSON.parse(stored);
-        const zoneIdInput = document.getElementById('zone-id') as HTMLInputElement;
-        const rulesetIdInput = document.getElementById('ruleset-id') as HTMLInputElement;
-        const ruleIdInput = document.getElementById('rule-id') as HTMLInputElement;
-        const apiTokenInput = document.getElementById('api-token') as HTMLInputElement;
-
-        if (zoneIdInput) zoneIdInput.value = inputs.zoneId || '';
-        if (rulesetIdInput) rulesetIdInput.value = inputs.rulesetId || '';
-        if (ruleIdInput) ruleIdInput.value = inputs.ruleId || '';
-        if (apiTokenInput) apiTokenInput.value = inputs.apiToken || '';
-      }
-    }
-
-    function saveInputs() {
-      const zoneIdInput = document.getElementById('zone-id') as HTMLInputElement;
-      const rulesetIdInput = document.getElementById('ruleset-id') as HTMLInputElement;
-      const ruleIdInput = document.getElementById('rule-id') as HTMLInputElement;
-      const apiTokenInput = document.getElementById('api-token') as HTMLInputElement;
-
-      if (zoneIdInput && rulesetIdInput && ruleIdInput && apiTokenInput) {
-        const inputs = {
-          zoneId: zoneIdInput.value,
-          rulesetId: rulesetIdInput.value,
-          ruleId: ruleIdInput.value,
-          apiToken: apiTokenInput.value
-        };
-        sessionStorage.setItem('cache_rule_inputs', JSON.stringify(inputs));
-      }
-    }
-
-    function getInputs() {
-      const zoneIdInput = document.getElementById('zone-id') as HTMLInputElement;
-      const rulesetIdInput = document.getElementById('ruleset-id') as HTMLInputElement;
-      const ruleIdInput = document.getElementById('rule-id') as HTMLInputElement;
-      const apiTokenInput = document.getElementById('api-token') as HTMLInputElement;
-
-      return {
-        zoneId: zoneIdInput?.value || '',
-        rulesetId: rulesetIdInput?.value || '',
-        ruleId: ruleIdInput?.value || '',
-        apiToken: apiTokenInput?.value || ''
-      };
-    }
-
-    async function checkStatus() {
-      const inputs = getInputs();
-      if (!inputs.zoneId || !inputs.rulesetId || !inputs.ruleId || !inputs.apiToken) {
-        alert('Please fill in all required fields');
-        return;
-      }
-
-      saveInputs();
-
-      try {
-        const result = await stateManager.executeAction('get-cache-rule-status', inputs);
-        currentStatus = result;
-        displayStatus(result);
-      } catch (error: any) {
-        alert(`Error checking status: ${error.message}`);
-      }
-    }
-
-    function displayStatus(status: any) {
-      const statusPanel = document.getElementById('cache-rule-status-panel');
-      const ruleIdEl = document.getElementById('status-rule-id');
-      const enabledEl = document.getElementById('status-enabled');
-      const descEl = document.getElementById('status-description');
-      const updatedEl = document.getElementById('status-updated');
-      const enableBtn = document.getElementById('enable-rule-btn') as HTMLButtonElement;
-      const disableBtn = document.getElementById('disable-rule-btn') as HTMLButtonElement;
-
-      if (statusPanel) statusPanel.classList.remove('hidden');
-
-      if (ruleIdEl) {
-        ruleIdEl.textContent = status.ruleId || '-';
-        ruleIdEl.title = status.ruleId;
-      }
-
-      if (enabledEl) {
-        enabledEl.textContent = status.enabled ? 'Enabled' : 'Disabled';
-        enabledEl.className = `status-value ${status.enabled ? 'enabled' : 'disabled'}`;
-      }
-
-      if (descEl) {
-        descEl.textContent = status.description || '-';
-      }
-
-      if (updatedEl) {
-        const date = new Date(status.lastUpdated);
-        updatedEl.textContent = date.toLocaleString();
-      }
-
-      if (enableBtn && disableBtn) {
-        if (status.enabled) {
-          enableBtn.style.display = 'none';
-          disableBtn.style.display = 'inline-block';
-        } else {
-          enableBtn.style.display = 'inline-block';
-          disableBtn.style.display = 'none';
-        }
-      }
-    }
-
-    async function toggleRule(enable: boolean) {
-      const inputs = getInputs();
-      if (!inputs.zoneId || !inputs.rulesetId || !inputs.ruleId || !inputs.apiToken) {
-        alert('Please fill in all required fields');
-        return;
-      }
-
-      const action = enable ? 'enable' : 'disable';
-      if (!confirm(`Are you sure you want to ${action} this rule?`)) {
-        return;
-      }
-
-      try {
-        await stateManager.executeAction('toggle-cache-rule', { ...inputs, enabled: enable });
-        await checkStatus();
-        alert(`Rule ${action}d successfully`);
-      } catch (error: any) {
-        alert(`Error ${action}ing rule: ${error.message}`);
-      }
-    }
-
-    function setupEventListeners() {
-      const checkBtn = document.getElementById('check-status-btn');
-      const enableBtn = document.getElementById('enable-rule-btn');
-      const disableBtn = document.getElementById('disable-rule-btn');
-
-      if (checkBtn) {
-        checkBtn.addEventListener('click', checkStatus);
-      }
-
-      if (enableBtn) {
-        enableBtn.addEventListener('click', () => toggleRule(true));
-      }
-
-      if (disableBtn) {
-        disableBtn.addEventListener('click', () => toggleRule(false));
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      loadInputs();
-      setupEventListeners();
-    });
-  </script>
-)}
