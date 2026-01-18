@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import BackgroundEffects from '../components/ui/BackgroundEffects.astro';
 import Header from '../components/layout/Header.astro';
+import ThemeToggle from '../components/ui/ThemeToggle.astro';
 
 interface Props {
   title?: string;
@@ -28,6 +29,7 @@ const {
   <body>
     <BackgroundEffects />
     <Header title={title} />
+    <ThemeToggle />
     <main class="container">
       <slot />
     </main>

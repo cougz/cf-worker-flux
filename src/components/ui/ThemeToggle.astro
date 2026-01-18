@@ -1,0 +1,136 @@
+---
+---
+
+<button class="theme-toggle" aria-label="Toggle theme">
+  <svg class="theme-icon sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+  <svg class="theme-icon moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 1000;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-md);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--cf-orange);
+    transform: scale(1.05);
+  }
+
+  .theme-toggle:active {
+    transform: scale(0.95);
+  }
+
+  .theme-icon {
+    position: absolute;
+    transition: all var(--transition-base);
+    opacity: 0;
+    transform: rotate(-180deg) scale(0);
+    color: var(--text-primary);
+  }
+
+  .theme-icon.sun {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+
+  [data-theme="dark"] .theme-icon.moon {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+
+  [data-theme="dark"] .theme-icon.sun {
+    opacity: 0;
+    transform: rotate(180deg) scale(0);
+  }
+</style>
+
+<script>
+  class ThemeManager {
+    private theme: 'light' | 'dark';
+    private storageKey = 'theme';
+    private callbacks: Set<(theme: 'light' | 'dark') => void> = new Set();
+
+    constructor() {
+      this.theme = this.getInitialTheme();
+      this.applyTheme();
+      this.setupSystemPrefListener();
+    }
+
+    private getInitialTheme(): 'light' | 'dark' {
+      const stored = localStorage.getItem(this.storageKey);
+      if (stored === 'light' || stored === 'dark') {
+        return stored;
+      }
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    public getTheme(): 'light' | 'dark' {
+      return this.theme;
+    }
+
+    public setTheme(theme: 'light' | 'dark'): void {
+      this.theme = theme;
+      localStorage.setItem(this.storageKey, theme);
+      this.applyTheme();
+      this.notifySubscribers();
+    }
+
+    public toggleTheme(): void {
+      this.setTheme(this.theme === 'light' ? 'dark' : 'light');
+    }
+
+    public subscribe(callback: (theme: 'light' | 'dark') => void): () => void {
+      this.callbacks.add(callback);
+      return () => this.callbacks.delete(callback);
+    }
+
+    private applyTheme(): void {
+      document.documentElement.setAttribute('data-theme', this.theme);
+    }
+
+    private setupSystemPrefListener(): void {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      mediaQuery.addEventListener('change', (e) => {
+        if (!localStorage.getItem(this.storageKey)) {
+          this.setTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+    }
+
+    private notifySubscribers(): void {
+      this.callbacks.forEach(callback => callback(this.theme));
+    }
+  }
+
+  const themeManager = new ThemeManager();
+
+  document.querySelector('.theme-toggle')?.addEventListener('click', () => {
+    themeManager.toggleTheme();
+  });
+</script>
