@@ -1,8 +1,13 @@
 ---
-import '../styles/inline-styles.css';
 import BackgroundEffects from '../components/ui/BackgroundEffects.astro';
 import Header from '../components/layout/Header.astro';
 import ThemeToggle from '../components/ui/ThemeToggle.astro';
+
+// Read CSS content inline
+const fs = await import('fs');
+const path = await import('path');
+const cssPath = path.join(process.cwd(), 'src', 'styles', 'global.css');
+const cssContent = fs.readFileSync(cssPath, 'utf-8');
 
 interface Props {
   title?: string;
@@ -25,6 +30,7 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style is:inline set:html={cssContent}></style>
   </head>
   <body>
     <BackgroundEffects />
