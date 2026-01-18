@@ -2,96 +2,44 @@
 import DashboardLayout from '../layouts/DashboardLayout.astro';
 import Dashboard from '../components/layout/Dashboard.astro';
 import Sidebar from '../components/layout/Sidebar.astro';
-import Card from '../components/display/Card.astro';
-import Button from '../components/interactive/Button.astro';
 ---
 
-<DashboardLayout title="CF Worker Flux - Dashboard">
-  <Dashboard>
-    <div class="grid grid-3" style="grid-template-columns: 250px 1fr;">
-      <Sidebar />
-      <div class="dashboard-content">
-        <section id="overview" class="section" data-section>
-          <h2>Overview</h2>
-          <p>Welcome to CF Worker Flux dashboard. A flexible UI framework for managing Cloudflare resources through workers.</p>
+<DashboardLayout title="CF Worker Flux - Dashboard" description="Dashboard for managing Cloudflare resources">
+  <div class="module-wrapper">
+    <Sidebar />
+    <div class="module-content-wrapper">
+      <div id="overview" class="module-content">
+        <div class="module-header">
+          <h1>Welcome to CF Worker Flux</h1>
+          <p>A flexible UI framework for managing Cloudflare resources through workers</p>
+        </div>
 
-          <div class="grid grid-2 mt-6">
-            <Card title="Resources" icon="📦" hover clickAction="dashboard/resources">
-              <p>Manage and monitor your Cloudflare resources</p>
-            </Card>
-            <Card title="Configuration" icon="⚙️" hover clickAction="dashboard/configuration">
-              <p>Configure worker settings and preferences</p>
-            </Card>
-            <Card title="Analytics" icon="📊" hover clickAction="dashboard/analytics">
-              <p>View performance metrics and statistics</p>
-            </Card>
-            <Card title="Settings" icon="🔧" hover clickAction="dashboard/settings">
-              <p>Manage dashboard and account settings</p>
-            </Card>
+        <div class="module-list">
+          <div class="module-card" onclick="window.location.href='/dashboard/resources'">
+            <div class="module-card-icon">📦</div>
+            <h3 class="module-card-title">Resources</h3>
+            <p class="module-card-description">Manage and monitor your Cloudflare resources</p>
           </div>
-        </section>
 
-        <section id="resources" class="section" data-section>
-          <h2>Resources</h2>
-          <p>Manage your Cloudflare resources with the controls below.</p>
-        </section>
+          <div class="module-card" onclick="window.location.href='/dashboard/configuration'">
+            <div class="module-card-icon">⚙️</div>
+            <h3 class="module-card-title">Configuration</h3>
+            <p class="module-card-description">Configure worker settings and preferences</p>
+          </div>
 
-        <section id="configuration" class="section" data-section>
-          <h2>Configuration</h2>
-          <p>Configure your worker settings.</p>
-        </section>
+          <div class="module-card" onclick="window.location.href='/dashboard/analytics'">
+            <div class="module-card-icon">📊</div>
+            <h3 class="module-card-title">Analytics</h3>
+            <p class="module-card-description">View performance metrics and statistics</p>
+          </div>
 
-        <section id="analytics" class="section" data-section>
-          <h2>Analytics</h2>
-          <p>View performance metrics.</p>
-        </section>
-
-        <section id="settings" class="section" data-section>
-          <h2>Settings</h2>
-          <p>Manage your dashboard settings.</p>
-        </section>
+          <div class="module-card" onclick="window.location.href='/dashboard/settings'">
+            <div class="module-card-icon">🔧</div>
+            <h3 class="module-card-title">Settings</h3>
+            <p class="module-card-description">Manage dashboard and account settings</p>
+          </div>
+        </div>
       </div>
     </div>
-  </Dashboard>
+  </div>
 </DashboardLayout>
-
-<style>
-  .dashboard-content {
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
-  }
-
-  .section {
-    scroll-margin-top: 24px;
-  }
-
-  .section h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 12px;
-  }
-
-  .section p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  @media (max-width: 768px) {
-    .grid-3 {
-      grid-template-columns: 1fr !important;
-    }
-  }
-</style>
-
-<script>
-  document.querySelectorAll('.card[data-action]').forEach((card) => {
-    card.addEventListener('click', () => {
-      const action = card.getAttribute('data-action');
-      if (action) {
-        window.location.href = `/${action}`;
-      }
-    });
-  });
-</script>

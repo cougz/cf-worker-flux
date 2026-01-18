@@ -1,180 +1,411 @@
+/* ============================================
+   Cloudflare Demos - Cloudflare-Style Design
+   Dark Mode Support | Dynamic Orange Waves | Floating Dots
+   ============================================ */
+
+/* CSS Custom Properties (Variables) */
 :root {
   --cf-orange: #F48024;
   --cf-orange-light: #FF8A3C;
   --cf-orange-dark: #d4641a;
   --bg-primary: #ffffff;
   --bg-secondary: #f8f9fa;
-  --bg-tertiary: #e9ecef;
+  --card-bg: #ffffff;
   --text-primary: #333333;
   --text-secondary: #666666;
-  --text-muted: #999999;
-  --border-color: #dee2e6;
-  --border-light: #e9ecef;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --transition-fast: 150ms ease;
-  --transition-base: 250ms ease;
-  --transition-slow: 350ms ease;
+  --border-color: #e5e5e5;
+  --shadow-subtle: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-hover: 0 4px 20px rgba(244,128,36,0.15);
+  --shadow-orange: 0 4px 20px rgba(244,128,36,0.25);
 }
 
 [data-theme="dark"] {
-  --bg-primary: #1a1b1e;
-  --bg-secondary: #25262b;
-  --bg-tertiary: #2c2e33;
-  --text-primary: #e5e5e5;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
-  --border-color: #3f3f46;
-  --border-light: #27272a;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #1a1a1a;
+  --card-bg: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --border-color: #333333;
+  --shadow-subtle: 0 2px 8px rgba(0,0,0,0.4);
+  --shadow-hover: 0 4px 20px rgba(244,128,36,0.3);
+  --shadow-orange: 0 4px 20px rgba(244,128,36,0.4);
 }
 
+/* Global Reset & Base Styles */
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--text-primary);
-  background-color: var(--bg-primary);
-  transition: background-color var(--transition-base), color var(--transition-base);
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.3s ease;
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
   min-height: 100vh;
-}
-
-a {
-  color: var(--cf-orange);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-a:hover {
-  color: var(--cf-orange-dark);
-}
-
-button {
-  font-family: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
-}
-
-input,
-select,
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
-}
-
-.wave {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  background: linear-gradient(180deg, transparent, rgba(248, 72, 36, 0.05));
-  pointer-events: none;
-  z-index: -1;
-}
-
-.wave::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 200%;
-  height: 100%;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23F48024" fill-opacity="0.1" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-  background-size: 50% 100%;
-  animation: wave 20s linear infinite;
-}
-
-.wave::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 200%;
-  height: 100%;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23F48024" fill-opacity="0.05" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
-  background-size: 50% 100%;
-  animation: wave 15s linear infinite reverse;
-}
-
-@keyframes wave {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.floating-dot {
-  position: fixed;
-  width: 6px;
-  height: 6px;
-  background: var(--cf-orange);
-  border-radius: 50%;
-  opacity: 0.3;
-  pointer-events: none;
-  z-index: -1;
-  animation: float 6s ease-in-out infinite;
-}
-
-.floating-dot:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
-.floating-dot:nth-child(2) { top: 20%; left: 80%; animation-delay: 1s; }
-.floating-dot:nth-child(3) { top: 30%; left: 50%; animation-delay: 2s; }
-.floating-dot:nth-child(4) { top: 40%; left: 10%; animation-delay: 3s; }
-.floating-dot:nth-child(5) { top: 50%; left: 90%; animation-delay: 4s; }
-.floating-dot:nth-child(6) { top: 60%; left: 30%; animation-delay: 5s; }
-.floating-dot:nth-child(7) { top: 70%; left: 70%; animation-delay: 0.5s; }
-.floating-dot:nth-child(8) { top: 80%; left: 40%; animation-delay: 1.5s; }
-.floating-dot:nth-child(9) { top: 90%; left: 60%; animation-delay: 2.5s; }
-.floating-dot:nth-child(10) { top: 15%; left: 75%; animation-delay: 3.5s; }
-
-@keyframes float {
-  0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-  50% { transform: translateY(-20px) scale(1.2); opacity: 0.6; }
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 20px;
 }
+
+/* ============================================
+   DYNAMIC BACKGROUND ELEMENTS
+   ============================================ */
+
+.wave-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.wave {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  border-radius: 50%;
+  background: linear-gradient(135deg,
+    var(--cf-orange) 0%,
+    var(--cf-orange-light) 50%,
+    var(--cf-orange) 100%);
+  opacity: 0.04;
+  animation: waveMove 20s ease-in-out infinite;
+}
+
+.wave-1 {
+  top: -60%;
+  left: -30%;
+  animation-delay: 0s;
+}
+
+.wave-2 {
+  top: -70%;
+  left: -40%;
+  animation-delay: -3s;
+}
+
+.wave-3 {
+  top: -80%;
+  left: -50%;
+  animation-delay: -6s;
+}
+
+@keyframes waveMove {
+  0%, 100% {
+    transform: translate(-30%, -30%) rotate(0deg);
+  }
+  50% {
+    transform: translate(-20%, -20%) rotate(180deg);
+  }
+}
+
+.dots-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: var(--cf-orange);
+  border-radius: 50%;
+  opacity: 0.25;
+  animation: floatDot 20s ease-in-out infinite;
+}
+
+.dot-1 { top: 10%; left: 15%; animation-delay: 0s; }
+.dot-2 { top: 20%; left: 80%; animation-delay: 2s; }
+.dot-3 { top: 30%; left: 45%; animation-delay: 4s; }
+.dot-4 { top: 40%; left: 10%; animation-delay: 6s; }
+.dot-5 { top: 50%; left: 90%; animation-delay: 8s; }
+.dot-6 { top: 60%; left: 25%; animation-delay: 10s; }
+.dot-7 { top: 70%; left: 70%; animation-delay: 12s; }
+.dot-8 { top: 80%; left: 35%; animation-delay: 14s; }
+.dot-9 { top: 90%; left: 55%; animation-delay: 16s; }
+.dot-10 { top: 15%; left: 75%; animation-delay: 18s; }
+
+@keyframes floatDot {
+  0%, 100% {
+    transform: translateY(0px);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-15px);
+    opacity: 0.4;
+  }
+}
+
+/* ============================================
+   APP HEADER (Cloudflare-Style)
+   ============================================ */
+
+.app-header {
+  background: linear-gradient(135deg, #F48024 0%, #FF8A3C 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 30px 40px;
+}
+
+.app-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: headerPulse 10s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.03); }
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.header-branding {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-icon {
+  font-size: 48px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
+.header-text {
+  flex: 1;
+}
+
+.header-text h1 {
+  margin: 0;
+  font-size: 2em;
+  color: white;
+}
+
+.header-text p {
+  margin: 0;
+  opacity: 0.85;
+  color: white;
+}
+
+.orange-line {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  margin-top: 20px;
+}
+
+/* ============================================
+   MODULE CARDS (Minimal + Orange Hover)
+   ============================================ */
+
+.module-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.module-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-subtle);
+}
+
+.module-card:hover {
+  border-color: var(--cf-orange);
+  box-shadow: var(--shadow-orange);
+  transform: translateY(-5px);
+}
+
+.module-card-icon {
+  font-size: 2.5em;
+  margin-bottom: 15px;
+}
+
+.module-card-title {
+  font-size: 1.5em;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.module-card-description {
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============================================
+   MODULE CONTENT AREA
+   ============================================ */
+
+.module-content {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: var(--shadow-subtle);
+  margin-bottom: 30px;
+}
+
+.module-header {
+  background: linear-gradient(135deg, var(--cf-orange) 0%, var(--cf-orange-light) 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.module-header h1 {
+  margin: 0 0 10px 0;
+  border: none;
+  font-size: 1.8em;
+  color: white;
+}
+
+.module-header p {
+  margin: 0 0 15px 0;
+  opacity: 0.9;
+  color: white;
+}
+
+/* ============================================
+   SIDEBAR NAVIGATION
+   ============================================ */
+
+.module-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-subtle);
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.sidebar-title {
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  margin-bottom: 5px;
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: 10px 14px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.sidebar-nav a:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.sidebar-nav a.active {
+  background: var(--cf-orange);
+  color: white;
+}
+
+.module-content-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ============================================
+   THEME TOGGLE BUTTON
+   ============================================ */
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 2px solid var(--cf-orange);
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-subtle);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-orange);
+  border-color: var(--cf-orange-light);
+}
+
+.theme-toggle svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
 
 .grid {
   display: grid;
-  gap: 24px;
+  gap: 20px;
 }
 
 .grid-2 {
@@ -235,12 +466,83 @@ textarea {
 .w-full { width: 100%; }
 .h-full { height: 100%; }
 
-.rounded-md { border-radius: var(--radius-md); }
-.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-md { border-radius: 8px; }
+.rounded-lg { border-radius: 12px; }
+.rounded-xl { border-radius: 16px; }
 
-.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-md { box-shadow: var(--shadow-subtle); }
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
 
 @media (max-width: 768px) {
+  .module-wrapper {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    position: static;
+    max-height: none;
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .logo-icon {
+    font-size: 40px;
+  }
+
+  .header-text h1 {
+    font-size: 1.5em;
+  }
+
+  .theme-toggle {
+    top: auto;
+    right: 15px;
+    bottom: 15px;
+    z-index: 1001;
+  }
+
+  .container {
+    padding: 15px;
+  }
+
+  .module-header,
+  .module-content {
+    padding: 20px;
+  }
+
+  .module-card {
+    padding: 20px;
+  }
+
   .grid-2,
   .grid-3 {
     grid-template-columns: 1fr;

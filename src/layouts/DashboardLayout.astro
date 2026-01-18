@@ -28,21 +28,10 @@ const {
   </head>
   <body>
     <BackgroundEffects />
-    <Header title={title} />
+    <Header title={title} description={description} />
     <ThemeToggle />
     <main class="container">
       <slot />
     </main>
   </body>
 </html>
-
-<style is:global>
-  body {
-    padding-bottom: 120px;
-  }
-
-  .container {
-    padding-top: 24px;
-    padding-bottom: 24px;
-  }
-</style>
