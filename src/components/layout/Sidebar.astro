@@ -15,9 +15,9 @@ const sections = [
     {sections.map((section) => (
       <li>
         <a
-          href={`#${section.id}`}
+          href={`/dashboard/${section.id}`}
           data-section={section.id}
-          class={section.id === 'overview' ? 'active' : ''}
+          class=""
         >
           {section.label}
         </a>
@@ -89,42 +89,13 @@ const sections = [
 
 <script>
   const links = document.querySelectorAll('[data-section]');
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const link = document.querySelector(`[data-section="${entry.target.id}"]`);
-        if (link) {
-          links.forEach(l => l.classList.remove('active'));
-          if (entry.isIntersecting) {
-            link.classList.add('active');
-          }
-        }
-      });
-    },
-    { threshold: 0.3 }
-  );
+  const currentPath = window.location.pathname;
+  const currentSection = currentPath.split('/').pop() || 'overview';
 
   links.forEach((link) => {
-    const targetId = link.getAttribute('href');
-    if (targetId) {
-      const targetElement = document.getElementById(targetId.slice(1));
-      if (targetElement) {
-        observer.observe(targetElement);
-      }
+    const section = link.getAttribute('data-section');
+    if (section === currentSection) {
+      link.classList.add('active');
     }
-  });
-
-  links.forEach((link) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = link.getAttribute('href');
-      if (targetId) {
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }
-    });
   });
 </script>
