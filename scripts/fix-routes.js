@@ -10,9 +10,15 @@ const routesPath = path.join(__dirname, '..', 'dist', '_routes.json');
 try {
   if (fs.existsSync(routesPath)) {
     const routes = JSON.parse(fs.readFileSync(routesPath, 'utf-8'));
-    routes.exclude = [];
+    // Explicitly include CSS files
+    routes.include = [
+      "/*",
+      "/_astro/*",
+      "/_astro/*.css"
+    ];
+    routes.exclude = []; // Remove all exclusions
     fs.writeFileSync(routesPath, JSON.stringify(routes, null, 2));
-    console.log('✓ Fixed _routes.json - removed exclusions');
+    console.log('✓ Fixed _routes.json - included /_astro/*');
   }
 } catch (error) {
   console.error('Error fixing routes:', error);
