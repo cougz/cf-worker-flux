@@ -1,0 +1,176 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  min: number;
+  max: number;
+  defaultMin: number;
+  defaultMax: number;
+  step?: number;
+}
+
+const {
+  id,
+  label,
+  min,
+  max,
+  defaultMin,
+  defaultMax,
+  step = 1,
+} = Astro.props;
+---
+
+<div class="range-slider-wrapper">
+  <label class="range-slider-label" for={id}>{label}</label>
+  <div class="range-slider-container">
+    <input
+      type="range"
+      id={`${id}-min`}
+      class="range-slider range-slider-min"
+      min={min}
+      max={max}
+      value={defaultMin}
+      step={step}
+    />
+    <input
+      type="range"
+      id={`${id}-max`}
+      class="range-slider range-slider-max"
+      min={min}
+      max={max}
+      value={defaultMax}
+      step={step}
+    />
+    <div class="range-slider-values">
+      <span class="range-slider-value" id={`${id}-min-value`}>{defaultMin}</span>
+      <span class="range-slider-separator">-</span>
+      <span class="range-slider-value" id={`${id}-max-value`}>{defaultMax}</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .range-slider-wrapper {
+    margin-bottom: 16px;
+  }
+
+  .range-slider-label {
+    display: block;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .range-slider-container {
+    position: relative;
+    padding: 8px 0;
+  }
+
+  .range-slider {
+    position: absolute;
+    width: calc(100% - 20px);
+    pointer-events: none;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: transparent;
+    outline: none;
+  }
+
+  .range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--cf-orange);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform var(--transition-fast);
+  }
+
+  .range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  .range-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--cf-orange);
+    cursor: pointer;
+    border: none;
+    pointer-events: auto;
+    transition: transform var(--transition-fast);
+  }
+
+  .range-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  .range-slider-track {
+    position: absolute;
+    width: 100%;
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    top: 8px;
+  }
+
+  .range-slider-values {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .range-slider-value {
+    padding: 4px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    min-width: 48px;
+    text-align: center;
+  }
+
+  .range-slider-separator {
+    color: var(--text-muted);
+  }
+</style>
+
+<script define:vars={{ id, min, max }}>
+  const minSlider = document.getElementById(`${id}-min`);
+  const maxSlider = document.getElementById(`${id}-max`);
+  const minValueDisplay = document.getElementById(`${id}-min-value`);
+  const maxValueDisplay = document.getElementById(`${id}-max-value`);
+
+  if (minSlider && maxSlider && minValueDisplay && maxValueDisplay) {
+    const updateSliders = () => {
+      let minVal = parseInt(minSlider.value);
+      let maxVal = parseInt(maxSlider.value);
+
+      if (maxVal - minVal < parseInt(minSlider.step || '1')) {
+        if (document.activeElement === minSlider) {
+          minSlider.value = maxVal - parseInt(minSlider.step || '1');
+        } else {
+          maxSlider.value = minVal + parseInt(minSlider.step || '1');
+        }
+      }
+
+      minValueDisplay.textContent = minSlider.value;
+      maxValueDisplay.textContent = maxSlider.value;
+
+      const gap = parseInt(maxSlider.value) - parseInt(minSlider.value);
+      const percent1 = (minSlider.value / max) * 100;
+      const percent2 = (maxSlider.value / max) * 100;
+
+      minSlider.style.background = `linear-gradient(to right, var(--bg-tertiary) ${percent1}%, var(--cf-orange) ${percent1}%, var(--cf-orange) ${percent2}%, var(--bg-tertiary) ${percent2}%)`;
+    };
+
+    minSlider.addEventListener('input', updateSliders);
+    maxSlider.addEventListener('input', updateSliders);
+    updateSliders();
+  }
+</script>

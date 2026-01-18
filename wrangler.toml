@@ -1,6 +1,9 @@
 name = "cf-worker-flux"
-main = "./dist/worker.mjs"
+main = "./dist/_worker.js/index.js"
 compatibility_date = "2026-01-18"
 
 [vars]
 ENVIRONMENT = "production"
+
+[site]
+bucket = "./dist"
