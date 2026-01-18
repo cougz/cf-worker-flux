@@ -1,0 +1,6 @@
+name = "cf-worker-flux"
+main = "./dist/worker.mjs"
+compatibility_date = "2026-01-18"
+
+[vars]
+ENVIRONMENT = "production"
