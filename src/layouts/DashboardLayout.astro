@@ -2,6 +2,7 @@
 import BackgroundEffects from '../components/ui/BackgroundEffects.astro';
 import Header from '../components/layout/Header.astro';
 import ThemeToggle from '../components/ui/ThemeToggle.astro';
+import { ViewTransitions } from 'astro:transitions';
 
 const {
   title = 'Flux Dashboard',
@@ -219,6 +220,9 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: var(--shadow-subtle);
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .module-card:hover {
@@ -334,12 +338,42 @@ body {
   .module-header, .module-content, .module-card { padding: 20px; }
 }
       </style>
+      <style is:global>
+        ::view-transition-old(root) {
+          animation: fade-out 0.3s ease-out;
+        }
+
+        ::view-transition-new(root) {
+          animation: fade-in 0.3s ease-out;
+        }
+
+        @keyframes fade-out {
+          from {
+            opacity: 1;
+          }
+          to {
+            opacity: 0;
+          }
+        }
+
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      </style>
     </head>
   <body>
     <BackgroundEffects />
     <Header title={title} description={description} />
     <ThemeToggle client:load />
-    <main class="container">
+    <ViewTransitions />
+    <main class="container" transition:animate="fade">
       <slot />
     </main>
   </body>

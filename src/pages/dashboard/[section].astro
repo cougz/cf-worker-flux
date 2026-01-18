@@ -49,7 +49,7 @@ const config = section && sectionConfig[section] ? sectionConfig[section] : { ti
   <div class="module-wrapper">
     <Sidebar />
     <div class="module-content-wrapper">
-      <div id={section} class="module-content">
+      <div id={section} class="module-content" transition:name={section}>
         <div class="module-header">
           <h1>{config.icon} {config.title}</h1>
           <p>{config.description}</p>
@@ -213,29 +213,29 @@ const config = section && sectionConfig[section] ? sectionConfig[section] : { ti
         {section === 'caching' && (
           <>
             <div class="module-list">
-              <div class="module-card" onclick='window.location.href="/dashboard/caching/manage"'>
+              <a href="/dashboard/caching/manage" class="module-card">
                 <div class="module-card-icon">🔄</div>
                 <h3 class="module-card-title">Enable/Disable Cache Rule</h3>
                 <p class="module-card-description">Toggle cache rules on and off</p>
-              </div>
+              </a>
 
-              <div class="module-card" onclick='window.location.href="/dashboard/caching/purge"'>
+              <a href="/dashboard/caching/purge" class="module-card">
                 <div class="module-card-icon">🗑️</div>
                 <h3 class="module-card-title">Purge Cache</h3>
                 <p class="module-card-description">Clear cached content</p>
-              </div>
+              </a>
 
-              <div class="module-card" onclick='window.location.href="/dashboard/caching/statistics"'>
+              <a href="/dashboard/caching/statistics" class="module-card">
                 <div class="module-card-icon">📈</div>
                 <h3 class="module-card-title">Cache Statistics</h3>
                 <p class="module-card-description">View cache hit rates and performance</p>
-              </div>
+              </a>
 
-              <div class="module-card" onclick='window.location.href="/dashboard/caching/analytics"'>
+              <a href="/dashboard/caching/analytics" class="module-card">
                 <div class="module-card-icon">📊</div>
                 <h3 class="module-card-title">Cache Analytics</h3>
                 <p class="module-card-description">Detailed caching analytics and reports</p>
-              </div>
+              </a>
             </div>
           </>
         )}
