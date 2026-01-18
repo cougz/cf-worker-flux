@@ -64,6 +64,7 @@ import AlertBox from '../../../components/display/AlertBox.astro';
             <Button
               label="Check Current Status"
               variant="secondary"
+              actionName="get-cache-rule-status"
             />
           </div>
         </Panel>
@@ -96,10 +97,12 @@ import AlertBox from '../../../components/display/AlertBox.astro';
               <Button
                 label="Enable Rule"
                 variant="primary"
+                actionName="toggle-cache-rule"
               />
               <Button
                 label="Disable Rule"
                 variant="danger"
+                actionName="toggle-cache-rule"
               />
             </div>
           </Panel>
@@ -195,3 +198,174 @@ import AlertBox from '../../../components/display/AlertBox.astro';
     display: none !important;
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    let currentStatus = null;
+
+    function loadInputs() {
+      const stored = sessionStorage.getItem('cache_rule_inputs');
+      if (stored) {
+        const inputs = JSON.parse(stored);
+        const zoneIdInput = document.getElementById('zone-id') as HTMLInputElement;
+        const rulesetIdInput = document.getElementById('ruleset-id') as HTMLInputElement;
+        const ruleIdInput = document.getElementById('rule-id') as HTMLInputElement;
+        const apiTokenInput = document.getElementById('api-token') as HTMLInputElement;
+
+        if (zoneIdInput) zoneIdInput.value = inputs.zoneId || '';
+        if (rulesetIdInput) rulesetIdInput.value = inputs.rulesetId || '';
+        if (ruleIdInput) ruleIdInput.value = inputs.ruleId || '';
+        if (apiTokenInput) apiTokenInput.value = inputs.apiToken || '';
+      }
+    }
+
+    function saveInputs() {
+      const zoneIdInput = document.getElementById('zone-id') as HTMLInputElement;
+      const rulesetIdInput = document.getElementById('ruleset-id') as HTMLInputElement;
+      const ruleIdInput = document.getElementById('rule-id') as HTMLInputElement;
+      const apiTokenInput = document.getElementById('api-token') as HTMLInputElement;
+
+      if (zoneIdInput && rulesetIdInput && ruleIdInput && apiTokenInput) {
+        const inputs = {
+          zoneId: zoneIdInput.value,
+          rulesetId: rulesetIdInput.value,
+          ruleId: ruleIdInput.value,
+          apiToken: apiTokenInput.value
+        };
+        sessionStorage.setItem('cache_rule_inputs', JSON.stringify(inputs));
+      }
+    }
+
+    function getInputs() {
+      const zoneIdInput = document.getElementById('zone-id') as HTMLInputElement;
+      const rulesetIdInput = document.getElementById('ruleset-id') as HTMLInputElement;
+      const ruleIdInput = document.getElementById('rule-id') as HTMLInputElement;
+      const apiTokenInput = document.getElementById('api-token') as HTMLInputElement;
+
+      return {
+        zoneId: zoneIdInput?.value || '',
+        rulesetIdInput: rulesetIdInput?.value || '',
+        ruleIdInput: ruleIdInput?.value || '',
+        apiToken: apiTokenInput?.value || ''
+      };
+    }
+
+    function displayStatus(status: any) {
+      const statusPanel = document.getElementById('cache-rule-status-panel');
+      const ruleIdEl = document.getElementById('status-rule-id');
+      const enabledEl = document.getElementById('status-enabled');
+      const descEl = document.getElementById('status-description');
+      const updatedEl = document.getElementById('status-updated');
+
+      if (statusPanel) statusPanel.classList.remove('hidden');
+
+      if (ruleIdEl) {
+        ruleIdEl.textContent = status.ruleId || '-';
+        ruleIdEl.title = status.ruleId;
+      }
+
+      if (enabledEl) {
+        enabledEl.textContent = status.enabled ? 'Enabled' : 'Disabled';
+        enabledEl.className = `status-value ${status.enabled ? 'enabled' : 'disabled'}`;
+      }
+
+      if (descEl) {
+        descEl.textContent = status.description || '-';
+      }
+
+      if (updatedEl) {
+        const date = new Date(status.lastUpdated);
+        updatedEl.textContent = date.toLocaleString();
+      }
+
+      const buttons = document.querySelectorAll('.status-actions button');
+      if (status.enabled) {
+        buttons[0]?.classList.add('hidden');
+        buttons[1]?.classList.remove('hidden');
+      } else {
+        buttons[0]?.classList.remove('hidden');
+        buttons[1]?.classList.add('hidden');
+      }
+    }
+
+    document.querySelector('button[data-action="get-cache-rule-status"]')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const inputs = getInputs();
+      
+      if (!inputs.zoneId || !inputs.rulesetIdInput || !inputs.ruleIdInput || !inputs.apiToken) {
+        alert('Please fill in all required fields');
+        return;
+      }
+
+      saveInputs();
+
+      try {
+        const response = await fetch('/api/actions/get-cache-rule-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            zoneId: inputs.zoneId,
+            rulesetId: inputs.rulesetIdInput,
+            ruleId: inputs.ruleIdInput,
+            apiToken: inputs.apiToken
+          })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          currentStatus = result.data;
+          displayStatus(result.data);
+        } else {
+          alert(`Error: ${result.error}`);
+        }
+      } catch (error: any) {
+        alert(`Error checking status: ${error.message}`);
+      }
+    });
+
+    const toggleButtons = document.querySelectorAll('button[data-action="toggle-cache-rule"]');
+    toggleButtons.forEach((button) => {
+      button.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const inputs = getInputs();
+        const isEnable = button.textContent?.trim() === 'Enable Rule';
+
+        if (!inputs.zoneId || !inputs.rulesetIdInput || !inputs.ruleIdInput || !inputs.apiToken) {
+          alert('Please fill in all required fields');
+          return;
+        }
+
+        const action = isEnable ? 'enable' : 'disable';
+        if (!confirm(`Are you sure you want to ${action} this rule?`)) {
+          return;
+        }
+
+        try {
+          const response = await fetch('/api/actions/toggle-cache-rule', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              zoneId: inputs.zoneId,
+              rulesetId: inputs.rulesetIdInput,
+              ruleId: inputs.ruleIdInput,
+              enabled: isEnable,
+              apiToken: inputs.apiToken
+            })
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            alert(`Rule ${action}d successfully`);
+            location.reload();
+          } else {
+            alert(`Error: ${result.error}`);
+          }
+        } catch (error: any) {
+          alert(`Error ${action}ing rule: ${error.message}`);
+        }
+      });
+    });
+
+    loadInputs();
+  });
+</script>
