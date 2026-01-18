@@ -1,0 +1,46 @@
+---
+import '../styles/global.css';
+import BackgroundEffects from '../components/ui/BackgroundEffects.astro';
+import Header from '../components/layout/Header.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'CF Worker Flux',
+  description = 'Dashboard for managing Cloudflare resources'
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <BackgroundEffects />
+    <Header title={title} />
+    <main class="container">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  body {
+    padding-bottom: 120px;
+  }
+
+  .container {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+</style>

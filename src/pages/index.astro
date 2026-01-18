@@ -1,0 +1,69 @@
+---
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+import Dashboard from '../components/layout/Dashboard.astro';
+import Sidebar from '../components/layout/Sidebar.astro';
+---
+
+<DashboardLayout title="CF Worker Flux - Dashboard">
+  <Dashboard>
+    <div class="grid grid-3" style="grid-template-columns: 250px 1fr;">
+      <Sidebar />
+      <div class="dashboard-content">
+        <section id="overview" class="section" data-section>
+          <h2>Overview</h2>
+          <p>Welcome to CF Worker Flux dashboard.</p>
+        </section>
+
+        <section id="resources" class="section" data-section>
+          <h2>Resources</h2>
+          <p>Manage your Cloudflare resources.</p>
+        </section>
+
+        <section id="configuration" class="section" data-section>
+          <h2>Configuration</h2>
+          <p>Configure your worker settings.</p>
+        </section>
+
+        <section id="analytics" class="section" data-section>
+          <h2>Analytics</h2>
+          <p>View performance metrics.</p>
+        </section>
+
+        <section id="settings" class="section" data-section>
+          <h2>Settings</h2>
+          <p>Manage your dashboard settings.</p>
+        </section>
+      </div>
+    </div>
+  </Dashboard>
+</DashboardLayout>
+
+<style>
+  .dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .section {
+    scroll-margin-top: 24px;
+  }
+
+  .section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .section p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .grid-3 {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>

@@ -1,0 +1,51 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = 'CF Worker Flux' } = Astro.props;
+---
+
+<header class="header">
+  <div class="header-inner">
+    <h1 class="header-title">{title}</h1>
+  </div>
+</header>
+
+<style>
+  .header {
+    background: linear-gradient(135deg, var(--cf-orange) 0%, var(--cf-orange-light) 100%);
+    color: white;
+    padding: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
+
+  .header-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+</style>

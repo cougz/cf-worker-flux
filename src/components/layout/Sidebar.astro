@@ -1,0 +1,132 @@
+---
+const sections = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'resources', label: 'Resources' },
+  { id: 'configuration', label: 'Configuration' },
+  { id: 'analytics', label: 'Analytics' },
+  { id: 'settings', label: 'Settings' },
+];
+---
+
+<aside class="sidebar">
+  <nav class="sidebar-nav">
+    <ul class="sidebar-list">
+      {sections.map((section) => (
+        <li class="sidebar-item">
+          <a
+            href={`#${section.id}`}
+            class="sidebar-link"
+            data-section={section.id}
+          >
+            {section.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</aside>
+
+<style>
+  .sidebar {
+    position: sticky;
+    top: 24px;
+    height: fit-content;
+  }
+
+  .sidebar-nav {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    border: 1px solid var(--border-light);
+  }
+
+  .sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar-item {
+    margin-bottom: 4px;
+  }
+
+  .sidebar-link {
+    display: block;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    font-weight: 500;
+  }
+
+  .sidebar-link:hover {
+    background: var(--bg-tertiary);
+    color: var(--cf-orange);
+  }
+
+  .sidebar-link.active {
+    background: var(--cf-orange);
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      position: static;
+      margin-bottom: 24px;
+    }
+
+    .sidebar-list {
+      display: flex;
+      overflow-x: auto;
+      gap: 8px;
+      padding-bottom: 8px;
+    }
+
+    .sidebar-item {
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    .sidebar-link {
+      white-space: nowrap;
+      padding: 8px 12px;
+      font-size: 0.875rem;
+    }
+  }
+</style>
+
+<script>
+  const sections = document.querySelectorAll('[data-section]');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const link = document.querySelector(`[data-section="${entry.target.id}"]`);
+        if (link) {
+          if (entry.isIntersecting) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
+
+  sections.forEach((section) => {
+    observer.observe(section);
+  });
+
+  document.querySelectorAll('.sidebar-link').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
