@@ -2,6 +2,8 @@
 import DashboardLayout from '../layouts/DashboardLayout.astro';
 import Dashboard from '../components/layout/Dashboard.astro';
 import Sidebar from '../components/layout/Sidebar.astro';
+import Card from '../components/display/Card.astro';
+import Button from '../components/interactive/Button.astro';
 ---
 
 <DashboardLayout title="CF Worker Flux - Dashboard">
@@ -11,12 +13,27 @@ import Sidebar from '../components/layout/Sidebar.astro';
       <div class="dashboard-content">
         <section id="overview" class="section" data-section>
           <h2>Overview</h2>
-          <p>Welcome to CF Worker Flux dashboard.</p>
+          <p>Welcome to CF Worker Flux dashboard. A flexible UI framework for managing Cloudflare resources through workers.</p>
+
+          <div class="grid grid-2 mt-6">
+            <Card title="Resources" icon="📦" hover clickAction="dashboard/resources">
+              <p>Manage and monitor your Cloudflare resources</p>
+            </Card>
+            <Card title="Configuration" icon="⚙️" hover clickAction="dashboard/configuration">
+              <p>Configure worker settings and preferences</p>
+            </Card>
+            <Card title="Analytics" icon="📊" hover clickAction="dashboard/analytics">
+              <p>View performance metrics and statistics</p>
+            </Card>
+            <Card title="Settings" icon="🔧" hover clickAction="dashboard/settings">
+              <p>Manage dashboard and account settings</p>
+            </Card>
+          </div>
         </section>
 
         <section id="resources" class="section" data-section>
           <h2>Resources</h2>
-          <p>Manage your Cloudflare resources.</p>
+          <p>Manage your Cloudflare resources with the controls below.</p>
         </section>
 
         <section id="configuration" class="section" data-section>
@@ -67,3 +84,14 @@ import Sidebar from '../components/layout/Sidebar.astro';
     }
   }
 </style>
+
+<script>
+  document.querySelectorAll('.card[data-action]').forEach((card) => {
+    card.addEventListener('click', () => {
+      const action = card.getAttribute('data-action');
+      if (action) {
+        window.location.href = `/${action}`;
+      }
+    });
+  });
+</script>

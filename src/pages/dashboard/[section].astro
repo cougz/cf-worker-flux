@@ -1,0 +1,281 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Dashboard from '../../components/layout/Dashboard.astro';
+import Sidebar from '../../components/layout/Sidebar.astro';
+import Panel from '../../components/display/Panel.astro';
+import Button from '../../components/interactive/Button.astro';
+import Slider from '../../components/interactive/Slider.astro';
+import RangeSlider from '../../components/interactive/RangeSlider.astro';
+import Input from '../../components/interactive/Input.astro';
+import Select from '../../components/interactive/Select.astro';
+import Toggle from '../../components/interactive/Toggle.astro';
+import ValueDisplay from '../../components/display/ValueDisplay.astro';
+import AlertBox from '../../components/display/AlertBox.astro';
+import ConfigBlock from '../../components/display/ConfigBlock.astro';
+
+const { section } = Astro.params;
+
+const sectionConfig: Record<string, { title: string; description: string }> = {
+  'resources': {
+    title: 'Resources',
+    description: 'Manage and monitor your Cloudflare resources'
+  },
+  'configuration': {
+    title: 'Configuration',
+    description: 'Configure worker settings and preferences'
+  },
+  'analytics': {
+    title: 'Analytics',
+    description: 'View performance metrics and statistics'
+  },
+  'settings': {
+    title: 'Settings',
+    description: 'Manage dashboard and account settings'
+  }
+};
+
+const config = sectionConfig[section] || { title: section, description: '' };
+---
+
+<DashboardLayout title={`${config.title} - CF Worker Flux`}>
+  <Dashboard>
+    <div class="grid grid-3" style="grid-template-columns: 250px 1fr;">
+      <Sidebar />
+      <div class="dashboard-content">
+        <div class="section-header">
+          <h1>{config.title}</h1>
+          <p>{config.description}</p>
+        </div>
+
+        {section === 'resources' && (
+          <>
+            <Panel title="Resource Controls" badge="Active">
+              <Toggle id="resource-1" label="Enable Cache" checked />
+              <Toggle id="resource-2" label="Enable Rate Limiting" checked />
+              <Toggle id="resource-3" label="Enable Analytics" />
+              
+              <Slider
+                id="cache-ttl"
+                label="Cache TTL (minutes)"
+                min={1}
+                max={1440}
+                defaultValue={60}
+              />
+              
+              <Button
+                label="Save Changes"
+                actionName="save-resource-state"
+                variant="primary"
+              />
+            </Panel>
+
+            <Panel title="Bulk Actions" collapsible>
+              <p class="mb-4">Perform actions on multiple resources at once.</p>
+              <Button label="Enable All" actionName="flip-resource" variant="secondary" />
+              <Button label="Disable All" actionName="flip-resource" variant="danger" />
+            </Panel>
+
+            <ValueDisplay
+              id="resource-status"
+              label="Resource Status"
+              value="All resources operational"
+              format="text"
+              status="success"
+            />
+          </>
+        )}
+
+        {section === 'configuration' && (
+          <>
+            <Panel title="Worker Configuration">
+              <Input
+                id="api-endpoint"
+                label="API Endpoint"
+                type="text"
+                placeholder="https://api.cloudflare.com"
+                required
+              />
+
+              <Select
+                id="region"
+                label="Region"
+                options={[
+                  { value: 'us-east', label: 'US East' },
+                  { value: 'us-west', label: 'US West' },
+                  { value: 'eu-west', label: 'EU West' },
+                  { value: 'asia-east', label: 'Asia East' }
+                ]}
+                defaultValue="us-east"
+              />
+
+              <RangeSlider
+                id="memory-limits"
+                label="Memory Limits (MB)"
+                min={128}
+                max={1024}
+                defaultMin={256}
+                defaultMax={512}
+                step={64}
+              />
+
+              <div class="flex gap-4 mt-4">
+                <Button label="Test Connection" actionName="test-api-connection" variant="secondary" />
+                <Button label="Save Configuration" actionName="update-config" variant="primary" />
+              </div>
+            </Panel>
+
+            <Panel title="Current Configuration" collapsible>
+              <ConfigBlock
+                title="worker.toml"
+                language="nginx"
+                code={`name = "cf-worker-flux"
+main = "./dist/_worker.js/index.js"
+compatibility_date = "2026-01-18"
+
+[vars]
+ENVIRONMENT = "production"
+REGION = "us-east"
+MEMORY_LIMIT = "512MB"`}
+              />
+            </Panel>
+          </>
+        )}
+
+        {section === 'analytics' && (
+          <>
+            <Panel title="Performance Metrics" badge="Live">
+              <div class="analytics-grid">
+                <ValueDisplay
+                  label="Total Requests"
+                  value="142,853"
+                  format="number"
+                  status="success"
+                />
+                <ValueDisplay
+                  label="Error Rate"
+                  value="0.12%"
+                  format="text"
+                  status="success"
+                />
+                <ValueDisplay
+                  label="Avg Latency"
+                  value="45ms"
+                  format="text"
+                  status="info"
+                />
+                <ValueDisplay
+                  label="Cache Hit Rate"
+                  value="94.2%"
+                  format="text"
+                  status="success"
+                />
+              </div>
+
+              <Button
+                label="Refresh Analytics"
+                actionName="get-analytics"
+                variant="secondary"
+              />
+            </Panel>
+
+            <Panel title="Time Range Filter">
+              <Slider
+                id="time-range"
+                label="Time Range (hours)"
+                min={1}
+                max={168}
+                defaultValue={24}
+              />
+            </Panel>
+
+            <AlertBox
+              type="info"
+              title="Analytics Note"
+              message="Analytics data is updated every 5 minutes. Last update: 2 minutes ago."
+            />
+          </>
+        )}
+
+        {section === 'settings' && (
+          <>
+            <Panel title="Dashboard Settings">
+              <Toggle id="dark-mode" label="Dark Mode" />
+              <Toggle id="notifications" label="Enable Notifications" checked />
+              <Toggle id="auto-refresh" label="Auto Refresh" />
+
+              <Input
+                id="refresh-interval"
+                label="Refresh Interval (seconds)"
+                type="number"
+                placeholder="30"
+                defaultValue="30"
+              />
+
+              <Button label="Save Settings" actionName="update-config" variant="primary" />
+            </Panel>
+
+            <Panel title="Account Settings" collapsible>
+              <Input
+                id="account-name"
+                label="Account Name"
+                type="text"
+                placeholder="My Account"
+              />
+
+              <Input
+                id="api-key"
+                label="API Key"
+                type="password"
+                placeholder="Enter your API key"
+                required
+              />
+
+              <Button label="Update Account" actionName="update-config" variant="secondary" />
+            </Panel>
+          </>
+        )}
+      </div>
+    </div>
+  </Dashboard>
+</DashboardLayout>
+
+<style>
+  .dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .section-header {
+    margin-bottom: 16px;
+  }
+
+  .section-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+  }
+
+  .section-header p {
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .grid-3 {
+      grid-template-columns: 1fr !important;
+    }
+
+    .analytics-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
