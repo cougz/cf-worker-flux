@@ -1,5 +1,4 @@
 ---
-import '../styles/global.css';
 import BackgroundEffects from '../components/ui/BackgroundEffects.astro';
 import Header from '../components/layout/Header.astro';
 import ThemeToggle from '../components/ui/ThemeToggle.astro';
@@ -13,6 +12,12 @@ const {
   title = 'CF Worker Flux',
   description = 'Dashboard for managing Cloudflare resources'
 } = Astro.props;
+
+// Read CSS content
+const fs = await import('fs');
+const path = await import('path');
+const cssPath = path.join(process.cwd(), 'src', 'styles', 'global.css');
+const globalCSS = fs.readFileSync(cssPath, 'utf-8');
 ---
 
 <!DOCTYPE html>
@@ -25,6 +30,7 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style is:inline set:html={globalCSS}></style>
   </head>
   <body>
     <BackgroundEffects />
