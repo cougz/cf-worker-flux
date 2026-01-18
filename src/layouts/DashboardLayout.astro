@@ -2,6 +2,7 @@
 import BackgroundEffects from '../components/ui/BackgroundEffects.astro';
 import Header from '../components/layout/Header.astro';
 import ThemeToggle from '../components/ui/ThemeToggle.astro';
+import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
   title?: string;
@@ -338,14 +339,115 @@ body {
   .container { padding: 15px; }
   .module-header, .module-content, .module-card { padding: 20px; }
 }
-    </style>
-  </head>
+      </style>
+      <style is:global>
+        ::view-transition-old(root) {
+          animation: fade-out 0.3s ease-out;
+        }
+
+        ::view-transition-new(root) {
+          animation: fade-in 0.3s ease-out;
+        }
+
+        @keyframes fade-out {
+          from {
+            opacity: 1;
+          }
+          to {
+            opacity: 0;
+          }
+        }
+
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        ::view-transition-old(caching) {
+          animation: slide-out-left 0.3s ease-out;
+        }
+
+        ::view-transition-new(caching) {
+          animation: slide-in-right 0.3s ease-out;
+        }
+
+        ::view-transition-old(resources) {
+          animation: slide-out-left 0.3s ease-out;
+        }
+
+        ::view-transition-new(resources) {
+          animation: slide-in-right 0.3s ease-out;
+        }
+
+        ::view-transition-old(configuration) {
+          animation: slide-out-left 0.3s ease-out;
+        }
+
+        ::view-transition-new(configuration) {
+          animation: slide-in-right 0.3s ease-out;
+        }
+
+        ::view-transition-old(analytics) {
+          animation: slide-out-left 0.3s ease-out;
+        }
+
+        ::view-transition-new(analytics) {
+          animation: slide-in-right 0.3s ease-out;
+        }
+
+        ::view-transition-old(settings) {
+          animation: slide-out-left 0.3s ease-out;
+        }
+
+        ::view-transition-new(settings) {
+          animation: slide-in-right 0.3s ease-out;
+        }
+
+        ::view-transition-old(overview) {
+          animation: slide-out-left 0.3s ease-out;
+        }
+
+        ::view-transition-new(overview) {
+          animation: slide-in-right 0.3s ease-out;
+        }
+
+        @keyframes slide-out-left {
+          from {
+            opacity: 1;
+            transform: translateX(0);
+          }
+          to {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+        }
+
+        @keyframes slide-in-right {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+      </style>
+    </head>
   <body>
     <BackgroundEffects />
     <Header title={title} description={description} />
     <ThemeToggle />
     <main class="container">
-      <slot />
+      <ViewTransitions>
+        <slot />
+      </ViewTransitions>
     </main>
   </body>
 </html>
