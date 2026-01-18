@@ -4,6 +4,7 @@ const sections = [
   { id: 'resources', label: 'Resources' },
   { id: 'configuration', label: 'Configuration' },
   { id: 'analytics', label: 'Analytics' },
+  { id: 'caching', label: 'Caching' },
   { id: 'settings', label: 'Settings' },
 ];
 ---
@@ -105,9 +106,9 @@ const sections = [
   );
 
   links.forEach((link) => {
-    const targetId = link.getAttribute('href')?.slice(1);
+    const targetId = link.getAttribute('href');
     if (targetId) {
-      const targetElement = document.getElementById(targetId);
+      const targetElement = document.getElementById(targetId.slice(1));
       if (targetElement) {
         observer.observe(targetElement);
       }
@@ -118,9 +119,11 @@ const sections = [
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const targetId = link.getAttribute('href');
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (targetId) {
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
     });
   });

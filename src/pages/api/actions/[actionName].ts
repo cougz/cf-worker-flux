@@ -38,6 +38,8 @@ async function executeAction(actionName: string, data: any): Promise<any> {
     'test-api-connection': testApiConnectionAction,
     'get-analytics': getAnalyticsAction,
     'save-resource-state': saveResourceStateAction,
+    'get-cache-rule-status': getCacheRuleStatusAction,
+    'toggle-cache-rule': toggleCacheRuleAction,
   };
 
   const handler = actions[actionName];
@@ -118,4 +120,64 @@ async function saveResourceStateAction(data: { resources: Array<{ id: string; st
     resources: resources.map(r => ({ ...r, savedAt: new Date().toISOString() })),
     message: `${resources.length} resource(s) state saved successfully`,
   };
+}
+
+async function getCacheRuleStatusAction(data: {
+  zoneId: string;
+  rulesetId: string;
+  ruleId: string;
+  apiToken: string;
+}): Promise<any> {
+  const { zoneId, rulesetId, ruleId, apiToken } = data;
+
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/zones/${zoneId}/rulesets/${rulesetId}/rules/${ruleId}`,
+    {
+      headers: {
+        'Authorization': `Bearer ${apiToken}`
+      }
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.errors?.[0]?.message || `API Error: ${response.status}`);
+  }
+
+  const result = await response.json();
+  return {
+    ruleId: result.result.id,
+    enabled: result.result.enabled,
+    description: result.result.description,
+    lastUpdated: result.result.last_updated
+  };
+}
+
+async function toggleCacheRuleAction(data: {
+  zoneId: string;
+  rulesetId: string;
+  ruleId: string;
+  enabled: boolean;
+  apiToken: string;
+}): Promise<any> {
+  const { zoneId, rulesetId, ruleId, enabled, apiToken } = data;
+
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/zones/${zoneId}/rulesets/${rulesetId}/rules/${ruleId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiToken}`
+      },
+      body: JSON.stringify({ enabled })
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.errors?.[0]?.message || `API Error: ${response.status}`);
+  }
+
+  return await response.json();
 }

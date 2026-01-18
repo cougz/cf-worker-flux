@@ -35,3 +35,17 @@ export interface Analytics {
   errors: number;
   latency: number;
 }
+
+export interface CacheRuleInputs {
+  zoneId: string;
+  rulesetId: string;
+  ruleId: string;
+  apiToken: string;
+}
+
+export interface CacheRuleStatus {
+  ruleId: string;
+  enabled: boolean;
+  description?: string;
+  lastUpdated: string;
+}
