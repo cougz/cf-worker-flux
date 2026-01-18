@@ -244,8 +244,8 @@ import AlertBox from '../../../components/display/AlertBox.astro';
 
       return {
         zoneId: zoneIdInput?.value || '',
-        rulesetIdInput: rulesetIdInput?.value || '',
-        ruleIdInput: ruleIdInput?.value || '',
+        rulesetId: rulesetIdInput?.value || '',
+        ruleId: ruleIdInput?.value || '',
         apiToken: apiTokenInput?.value || ''
       };
     }
@@ -292,7 +292,7 @@ import AlertBox from '../../../components/display/AlertBox.astro';
       e.preventDefault();
       const inputs = getInputs();
       
-      if (!inputs.zoneId || !inputs.rulesetIdInput || !inputs.ruleIdInput || !inputs.apiToken) {
+      if (!inputs.zoneId || !inputs.rulesetId || !inputs.ruleId || !inputs.apiToken) {
         alert('Please fill in all required fields');
         return;
       }
@@ -305,8 +305,8 @@ import AlertBox from '../../../components/display/AlertBox.astro';
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             zoneId: inputs.zoneId,
-            rulesetId: inputs.rulesetIdInput,
-            ruleId: inputs.ruleIdInput,
+            rulesetId: inputs.rulesetId,
+            ruleId: inputs.ruleId,
             apiToken: inputs.apiToken
           })
         });
@@ -330,7 +330,7 @@ import AlertBox from '../../../components/display/AlertBox.astro';
         const inputs = getInputs();
         const isEnable = button.textContent?.trim() === 'Enable Rule';
 
-        if (!inputs.zoneId || !inputs.rulesetIdInput || !inputs.ruleIdInput || !inputs.apiToken) {
+        if (!inputs.zoneId || !inputs.rulesetId || !inputs.ruleId || !inputs.apiToken) {
           alert('Please fill in all required fields');
           return;
         }
@@ -346,8 +346,8 @@ import AlertBox from '../../../components/display/AlertBox.astro';
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               zoneId: inputs.zoneId,
-              rulesetId: inputs.rulesetIdInput,
-              ruleId: inputs.ruleIdInput,
+              rulesetId: inputs.rulesetId,
+              ruleId: inputs.ruleId,
               enabled: isEnable,
               apiToken: inputs.apiToken
             })
