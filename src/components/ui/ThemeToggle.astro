@@ -124,7 +124,7 @@
       return () => this.callbacks.delete(callback);
     }
 
-    private applyTheme(): void {
+    public applyTheme(): void {
       document.documentElement.setAttribute('data-theme', this.theme);
     }
 
@@ -163,4 +163,11 @@
 
   // Re-attach event listeners after view transitions
   document.addEventListener('astro:page-load', setupThemeToggle);
+
+  // Reapply theme immediately after View Transitions swap (before paint)
+  document.addEventListener('astro:after-swap', () => {
+    if (window.themeManager) {
+      window.themeManager.applyTheme();
+    }
+  });
 </script>
