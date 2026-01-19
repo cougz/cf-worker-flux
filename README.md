@@ -1,108 +1,90 @@
-# CF Worker Flux
+# Flux Dashboard
 
-A flexible UI framework for managing Cloudflare resources through workers, built with Astro and Cloudflare Workers.
+Dashboard for managing Cloudflare resources built with Astro and deployed on Cloudflare Pages.
 
-## Features
+## Tech Stack
 
-- **Dashboard Layout**: Cloudflare-inspired design with sidebar navigation
-- **Interactive Components**: Buttons, sliders, inputs, selects, toggles with action handling
-- **Display Components**: Cards, panels, alerts, value displays, code blocks
-- **Theme Management**: Light/dark mode with persistence
-- **State Management**: Centralized state manager with action execution
-- **API Actions**: Generic action endpoint for server-side operations
-- **Responsive Design**: Mobile-friendly layout
-
-## Installation
-
-```bash
-bun install
-```
+- **Framework:** Astro 5.x with SSR
+- **Deployment:** Cloudflare Pages
+- **Backend:** Astro API routes (Pages Functions)
+- **Styling:** CSS Custom Properties with dark mode support
+- **Transitions:** Astro View Transitions for smooth navigation
 
 ## Development
 
 ```bash
+# Start development server
 bun run dev
-```
 
-## Build
-
-```bash
+# Build for production
 bun run build
+
+# Preview Pages build locally
+bun run preview
 ```
 
 ## Deployment
 
-To deploy to Cloudflare Workers, set the `CLOUDFLARE_API_TOKEN` environment variable:
+The application automatically deploys to Cloudflare Pages:
 
 ```bash
-export CLOUDFLARE_API_TOKEN=your-token-here
+# Deploy to production (builds + deploys)
 bun run deploy
 ```
+
+Or manually:
+```bash
+git pull
+bun run deploy
+```
+
+**Live URL:** https://flux.cloudemo.org
+
+**Pages URL:** https://cf-worker-flux.pages.dev
 
 ## Project Structure
 
 ```
-cf-worker-flux/
+/
 ├── src/
-│   ├── components/
-│   │   ├── interactive/     # Button, Slider, Input, etc.
-│   │   ├── display/         # Card, Panel, AlertBox, etc.
-│   │   ├── layout/          # Dashboard, Header, Sidebar
-│   │   └── ui/              # BackgroundEffects, ThemeToggle
-│   ├── layouts/             # Base layouts
-│   ├── pages/               # Routes and API endpoints
-│   ├── scripts/             # Client-side scripts
-│   ├── styles/              # CSS files
-│   └── types/               # TypeScript definitions
-├── astro.config.mjs         # Astro configuration
-├── wrangler.toml            # Cloudflare Workers config
-└── package.json
+│   ├── pages/              # Route pages (file-based routing)
+│   │   ├── index.astro     # Homepage / Overview
+│   │   ├── dashboard/
+│   │   │   ├── [section].astro          # Dynamic section pages
+│   │   │   └── caching/
+│   │   │       └── manage.astro         # Cache rule management
+│   │   └── api/
+│   │       └── actions/
+│   │           └── [actionName].ts      # Backend API endpoints
+│   ├── components/         # Reusable components
+│   ├── layouts/            # Layout templates
+│   └── types/              # TypeScript types
+├── dist/                   # Build output (not committed)
+└── wrangler.toml          # Cloudflare Pages configuration
 ```
 
-## Component Usage
+## Features
 
-### Button
-```astro
-<Button
-  label="Save Changes"
-  actionName="save-config"
-  variant="primary"
-  size="md"
-/>
+- ✅ Server-side rendering (SSR)
+- ✅ Client-side navigation with View Transitions
+- ✅ Dark mode support
+- ✅ Backend API endpoints for Cloudflare API integration
+- ✅ Cache rule management
+- ✅ Responsive design
+
+## API Endpoints
+
+Backend functions are available at `/api/actions/[actionName]`:
+
+- `get-cache-rule-status` - Fetch cache rule status from Cloudflare
+- `toggle-cache-rule` - Enable/disable cache rules
+- Additional mock endpoints for UI demonstration
+
+## Environment Variables
+
+Set in Cloudflare Pages dashboard under Settings > Environment variables:
+
+```
+ENVIRONMENT=production
 ```
 
-### Panel
-```astro
-<Panel title="Settings" badge="Active" collapsible>
-  <p>Your content here</p>
-</Panel>
-```
-
-### ValueDisplay
-```astro
-<ValueDisplay
-  label="Status"
-  value="Operational"
-  format="text"
-  status="success"
-/>
-```
-
-## Action Handlers
-
-Actions are defined in `src/pages/api/actions/[actionName].ts`. Add new actions to the `actions` registry:
-
-```typescript
-const actions: Record<string, (data: any) => Promise<any>> = {
-  'my-action': myActionHandler,
-  // ...
-};
-```
-
-## Theme Management
-
-The theme toggle is in the top-right corner. Themes persist in localStorage and respect system preferences.
-
-## License
-
-MIT
