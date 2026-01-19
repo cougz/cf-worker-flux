@@ -215,11 +215,9 @@ const config = section && sectionConfig[section] ? sectionConfig[section] : { ti
             <p style="margin-bottom: 16px; color: var(--text-secondary);">
               Manage your Cloudflare cache rules by enabling or disabling specific rules.
             </p>
-            <Button
-              label="Manage Cache Rules"
-              actionName="navigate-to-cache-manage"
-              variant="primary"
-            />
+            <a href="/dashboard/caching/manage" class="button button-primary button-md">
+              <span class="button-text">Manage Cache Rules</span>
+            </a>
           </Panel>
         )}
       </div>
@@ -240,17 +238,37 @@ const config = section && sectionConfig[section] ? sectionConfig[section] : { ti
       grid-template-columns: 1fr 1fr;
     }
   }
-</style>
 
-<script>
-  document.addEventListener('astro:page-load', () => {
-    const cacheManageButton = document.querySelector('button[data-action="navigate-to-cache-manage"]');
-    if (cacheManageButton) {
-      cacheManageButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.href = '/dashboard/caching/manage';
-      });
-    }
-  });
-</script>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    border: none;
+  }
+
+  .button-primary {
+    background: var(--cf-orange);
+    color: white;
+    border: 2px solid var(--cf-orange);
+  }
+
+  .button-primary:hover {
+    background: var(--cf-orange-dark);
+    border-color: var(--cf-orange-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .button-md {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+</style>
 

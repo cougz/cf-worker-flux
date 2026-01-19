@@ -142,9 +142,25 @@
     }
   }
 
-  const themeManager = new ThemeManager();
+  // Use a global singleton to prevent re-initialization on navigation
+  if (!window.themeManager) {
+    window.themeManager = new ThemeManager();
+  }
 
-  document.querySelector('.theme-toggle')?.addEventListener('click', () => {
-    themeManager.toggleTheme();
-  });
+  // Setup button click handler for both initial load and after view transitions
+  function setupThemeToggle() {
+    const button = document.querySelector('.theme-toggle');
+    if (button && !button.dataset.initialized) {
+      button.addEventListener('click', () => {
+        window.themeManager.toggleTheme();
+      });
+      button.dataset.initialized = 'true';
+    }
+  }
+
+  // Initialize on first load
+  setupThemeToggle();
+
+  // Re-attach event listeners after view transitions
+  document.addEventListener('astro:page-load', setupThemeToggle);
 </script>
