@@ -1,7 +1,6 @@
 name = "cf-worker-flux"
-main = "./dist/_worker.js/index.js"
 compatibility_date = "2026-01-18"
-account_id = "9c0e55ad8906a05169a1259400c71e5b"
+pages_build_output_dir = "dist"
 
 [vars]
 ENVIRONMENT = "production"

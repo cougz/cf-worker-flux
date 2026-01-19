@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && node scripts/fix-routes.js",
-    "preview": "astro preview",
+    "build": "astro build",
+    "preview": "wrangler pages dev dist",
     "astro": "astro",
-    "deploy": "wrangler deploy"
+    "deploy": "astro build && CLOUDFLARE_ACCOUNT_ID=9c0e55ad8906a05169a1259400c71e5b wrangler pages deploy dist --project-name=cf-worker-flux --branch=main --commit-dirty=true"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^11.0.0",
