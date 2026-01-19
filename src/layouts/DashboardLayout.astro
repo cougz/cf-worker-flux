@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
 import BackgroundEffects from '../components/ui/BackgroundEffects.astro';
 import Header from '../components/layout/Header.astro';
 import ThemeToggle from '../components/ui/ThemeToggle.astro';
@@ -15,6 +16,7 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <ViewTransitions />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -219,6 +221,9 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: var(--shadow-subtle);
+  text-decoration: none;
+  display: block;
+  color: inherit;
 }
 
 .module-card:hover {
@@ -337,7 +342,7 @@ body {
     </head>
   <body>
     <BackgroundEffects />
-    <Header title={title} description={description} />
+    <Header title="Flux Dashboard" description="Dashboard for managing Cloudflare resources" />
     <ThemeToggle client:load />
     <main class="container">
       <slot />

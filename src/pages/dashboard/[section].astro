@@ -211,33 +211,16 @@ const config = section && sectionConfig[section] ? sectionConfig[section] : { ti
         )}
 
         {section === 'caching' && (
-          <>
-            <div class="module-list">
-              <div class="module-card" onclick='window.location.href="/dashboard/caching/manage"'>
-                <div class="module-card-icon">🔄</div>
-                <h3 class="module-card-title">Enable/Disable Cache Rule</h3>
-                <p class="module-card-description">Toggle cache rules on and off</p>
-              </div>
-
-              <div class="module-card" onclick='window.location.href="/dashboard/caching/purge"'>
-                <div class="module-card-icon">🗑️</div>
-                <h3 class="module-card-title">Purge Cache</h3>
-                <p class="module-card-description">Clear cached content</p>
-              </div>
-
-              <div class="module-card" onclick='window.location.href="/dashboard/caching/statistics"'>
-                <div class="module-card-icon">📈</div>
-                <h3 class="module-card-title">Cache Statistics</h3>
-                <p class="module-card-description">View cache hit rates and performance</p>
-              </div>
-
-              <div class="module-card" onclick='window.location.href="/dashboard/caching/analytics"'>
-                <div class="module-card-icon">📊</div>
-                <h3 class="module-card-title">Cache Analytics</h3>
-                <p class="module-card-description">Detailed caching analytics and reports</p>
-              </div>
-            </div>
-          </>
+          <Panel title="Cache Management">
+            <p style="margin-bottom: 16px; color: var(--text-secondary);">
+              Manage your Cloudflare cache rules by enabling or disabling specific rules.
+            </p>
+            <Button
+              label="Manage Cache Rules"
+              actionName="navigate-to-cache-manage"
+              variant="primary"
+            />
+          </Panel>
         )}
       </div>
     </div>
@@ -257,5 +240,17 @@ const config = section && sectionConfig[section] ? sectionConfig[section] : { ti
       grid-template-columns: 1fr 1fr;
     }
   }
-  </style>
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const cacheManageButton = document.querySelector('button[data-action="navigate-to-cache-manage"]');
+    if (cacheManageButton) {
+      cacheManageButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = '/dashboard/caching/manage';
+      });
+    }
+  });
+</script>
 

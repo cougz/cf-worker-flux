@@ -17,7 +17,7 @@ const sections = [
         <a
           href={section.path}
           data-section={section.id}
-          class=""
+          data-astro-prefetch
         >
           {section.label}
         </a>
@@ -88,16 +88,35 @@ const sections = [
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  function updateActiveLink() {
     const links = document.querySelectorAll('[data-section]');
     const currentPath = window.location.pathname;
-    const currentSection = currentPath.split('/').pop() || 'overview';
+    
+    // Determine current section from path
+    let currentSection = 'overview';
+    if (currentPath === '/') {
+      currentSection = 'overview';
+    } else {
+      const pathParts = currentPath.split('/').filter(Boolean);
+      if (pathParts.length >= 2 && pathParts[0] === 'dashboard') {
+        currentSection = pathParts[1];
+      }
+    }
 
+    // Update active states
     links.forEach((link) => {
       const section = link.getAttribute('data-section');
       if (section === currentSection) {
         link.classList.add('active');
+      } else {
+        link.classList.remove('active');
       }
     });
-  });
+  }
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', updateActiveLink);
+  
+  // Update on view transitions
+  document.addEventListener('astro:page-load', updateActiveLink);
 </script>
