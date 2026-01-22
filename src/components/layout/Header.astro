@@ -10,12 +10,42 @@ const { title = 'Flux Dashboard', description = 'Dashboard for managing Cloudfla
 <header class="app-header">
   <div class="header-content">
     <div class="header-branding">
-      <div class="logo-icon">☁️</div>
-      <div class="header-text">
-        <h1>{title}</h1>
-        <p>{description}</p>
-      </div>
+      <a href="/" class="header-link">
+        <div class="logo-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <div class="header-text">
+          <h1>Flux - Awesome Cloudflare Demos</h1>
+        </div>
+      </a>
     </div>
   </div>
   <div class="orange-line"></div>
 </header>
+
+<style>
+  .header-link {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    color: white;
+  }
+
+  .logo-icon {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+    }
+    50% {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 15px rgba(255,255,255,0.8));
+    }
+  }
+</style>

@@ -68,7 +68,20 @@ export const POST: APIRoute = async ({ request, locals }) => {
   } catch (error) {
     console.error('Chat API error:', error);
     
-    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    let errorMessage = 'An unexpected error occurred';
+    
+    if (error instanceof Error) {
+      errorMessage = error.message;
+      
+      // Check if error suggests firewall blocking
+      if (errorMessage.includes('fetch failed') || 
+          errorMessage.includes('403') || 
+          errorMessage.includes('blocked') ||
+          errorMessage.includes('nationality') ||
+          errorMessage.includes('pii')) {
+        errorMessage = 'The work is mysterious and important. Your inquiry contains data that requires refinement. Please consult your handbook.';
+      }
+    }
     
     return new Response(
       JSON.stringify({ error: errorMessage }),

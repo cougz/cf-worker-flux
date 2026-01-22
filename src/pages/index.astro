@@ -1,3 +1,273 @@
 ---
-return Astro.redirect('/dashboard/firewall-ai');
+import DashboardLayout from '../layouts/DashboardLayout.astro';
+
+const demos = [
+  {
+    title: 'Firewall for AI',
+    description: 'Test Cloudflare\'s Firewall for AI with real-time prompt filtering. Try scenarios involving PII detection, prompt injection, and unsafe topics to see how the firewall protects against malicious AI prompts.',
+    icon: '🛡️',
+    path: '/dashboard/firewall-ai',
+    comingSoon: false
+  },
+];
 ---
+
+<DashboardLayout title="Flux - Awesome Cloudflare Demos" description="Explore Cloudflare's powerful developer platform">
+  <div class="landing-page">
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">Welcome to Flux</h1>
+        <p class="hero-subtitle">Explore Cloudflare's powerful developer platform through interactive demos</p>
+      </div>
+      <div class="hero-decoration">
+        <div class="flux-circle"></div>
+        <div class="flux-circle"></div>
+        <div class="flux-circle"></div>
+      </div>
+    </div>
+
+    <div class="demos-grid">
+      {demos.map((demo) => (
+        <a 
+          href={demo.path} 
+          class={`demo-card ${demo.comingSoon ? 'demo-card-coming-soon' : ''}`}
+          data-astro-prefetch
+        >
+          <div class="demo-icon">{demo.icon}</div>
+          <h2 class="demo-title">{demo.title}</h2>
+          <p class="demo-description">{demo.description}</p>
+          {demo.comingSoon && (
+            <div class="demo-badge">Coming Soon</div>
+          )}
+        </a>
+      ))}
+    </div>
+
+    <div class="info-section">
+      <div class="info-card">
+        <div class="info-icon">⚡</div>
+        <h3>Lightning Fast</h3>
+        <p>All demos run on Cloudflare's global network for instant response times.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🔒</div>
+        <h3>Secure by Design</h3>
+        <p>Built with enterprise-grade security and privacy protection.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🌐</div>
+        <h3>Edge Native</h3>
+        <p>Experience the power of edge computing with Workers, Pages, and more.</p>
+      </div>
+    </div>
+  </div>
+</DashboardLayout>
+
+<style>
+  .landing-page {
+    padding: 40px 20px;
+  }
+
+  .hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 60px;
+    position: relative;
+    min-height: 300px;
+  }
+
+  .hero-content {
+    flex: 1;
+    max-width: 600px;
+  }
+
+  .hero-title {
+    font-size: 3em;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    background: linear-gradient(135deg, var(--cf-orange) 0%, var(--cf-orange-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2em;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .hero-decoration {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .flux-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid var(--cf-orange);
+    opacity: 0.3;
+  }
+
+  .flux-circle:nth-child(1) {
+    width: 200px;
+    height: 200px;
+    animation: rotate 8s linear infinite;
+  }
+
+  .flux-circle:nth-child(2) {
+    width: 150px;
+    height: 150px;
+    animation: rotate 6s linear infinite reverse;
+    border-width: 3px;
+  }
+
+  .flux-circle:nth-child(3) {
+    width: 100px;
+    height: 100px;
+    animation: rotate 4s linear infinite;
+    border-width: 4px;
+  }
+
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .demos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+  }
+
+  .demo-card {
+    display: block;
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 40px 30px;
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .demo-card:hover {
+    border-color: var(--cf-orange);
+    box-shadow: var(--shadow-orange);
+    transform: translateY(-8px);
+  }
+
+  .demo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--cf-orange) 0%, var(--cf-orange-light) 100%);
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
+  }
+
+  .demo-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .demo-icon {
+    font-size: 3em;
+    margin-bottom: 20px;
+  }
+
+  .demo-title {
+    font-size: 1.5em;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    color: var(--text-primary);
+  }
+
+  .demo-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .demo-card-coming-soon {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .demo-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--cf-orange);
+    color: white;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75em;
+    font-weight: 600;
+  }
+
+  .info-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+  }
+
+  .info-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    text-align: center;
+  }
+
+  .info-icon {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+  }
+
+  .info-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2em;
+    color: var(--text-primary);
+  }
+
+  .info-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      flex-direction: column;
+      text-align: center;
+      min-height: auto;
+    }
+
+    .hero-decoration {
+      margin-top: 40px;
+    }
+
+    .hero-title {
+      font-size: 2em;
+    }
+
+    .demos-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .landing-page {
+      padding: 20px 10px;
+    }
+  }
+</style>
