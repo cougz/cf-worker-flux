@@ -1,13 +1,81 @@
-<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="48" height="48" rx="8" fill="#1a3a5c"/>
-  <text x="24" y="30"
-        font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-        font-size="10"
-        font-weight="700"
-        fill="#ffffff"
-        text-anchor="middle">
-    LUMON
-  </text>
-  <rect x="8" y="8" width="6" height="6" rx="1" fill="#ffffff" opacity="0.9"/>
-  <rect x="8" y="18" width="4" height="4" rx="0.5" fill="#ffffff" opacity="0.6"/>
+<svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="600" fill="#000000"/>
+
+  <g transform="translate(600, 300)">
+    <ellipse cx="0" cy="0" rx="480" ry="220"
+             fill="none"
+             stroke="#ffffff"
+             stroke-width="11"/>
+
+    <line x1="-480" y1="-110" x2="480" y2="-110" stroke="#ffffff" stroke-width="9"/>
+    <line x1="-480" y1="0" x2="480" y2="0" stroke="#ffffff" stroke-width="9"/>
+    <line x1="-480" y1="110" x2="480" y2="110" stroke="#ffffff" stroke-width="9"/>
+
+    <path d="M -420,-140 Q -465,-70 -475,0 Q -465,70 -420,140"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+
+    <path d="M -320,-180 Q -360,-90 -370,0 Q -360,90 -320,180"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+
+    <path d="M -200,-210 Q -220,-105 -225,0 Q -220,105 -200,210"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+
+    <path d="M -80,-218 Q -85,-109 -87,0 Q -85,109 -80,218"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+
+    <path d="M 80,-218 Q 85,-109 87,0 Q 85,109 80,218"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+
+    <path d="M 200,-210 Q 220,-105 225,0 Q 220,105 200,210"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+
+    <path d="M 320,-180 Q 360,-90 370,0 Q 360,90 320,180"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+
+    <path d="M 420,-140 Q 465,-70 475,0 Q 465,70 420,140"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+
+    <path d="M -420,-140 Q -370,-160 -320,-180"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -320,-180 Q -260,-195 -200,-210"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -200,-210 Q -140,-217 -80,-218"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -80,-218 Q 0,-220 80,-218"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M 80,-218 Q 140,-217 200,-210"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M 200,-210 Q 260,-195 320,-180"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M 320,-180 Q 370,-160 420,-140"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+
+    <path d="M -420,140 Q -370,160 -320,180"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -320,180 Q -260,195 -200,210"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -200,210 Q -140,217 -80,218"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -80,218 Q 0,220 80,218"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M 80,218 Q 140,217 200,210"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M 200,210 Q 260,195 320,180"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M 320,180 Q 370,160 420,140"
+          fill="none" stroke="#ffffff" stroke-width="9"/>
+
+    <text x="0" y="45"
+          font-family="'Arial Black', 'Arial Bold', Arial, sans-serif"
+          font-size="145"
+          font-weight="900"
+          fill="#ffffff"
+          text-anchor="middle"
+          letter-spacing="20">LUMON</text>
+
+    <g transform="translate(105, 5)">
+      <path d="M 0,-28 C -12,-16 -14,-4 -14,8 C -14,20 -8,28 0,35 C 8,28 14,20 14,8 C 14,-4 12,-16 0,-28 Z"
+            fill="#000000"/>
+    </g>
+  </g>
 </svg>
