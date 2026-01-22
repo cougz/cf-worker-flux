@@ -11,6 +11,7 @@ const sections = [
   { id: 'firewall-ai', label: 'Firewall for AI', path: '/dashboard/firewall-ai' },
 ];
 ---
+---
 
 <aside class="sidebar">
   <div class="sidebar-title">Navigation</div>
@@ -177,6 +178,15 @@ const sections = [
       link.classList.toggle('active', subsection === currentSection);
     });
   }
+
+  // Listen for section-change events from other pages
+  document.addEventListener('section-change', (e: CustomEvent) => {
+    const section = e.detail.section;
+    if (section) {
+      currentSection = section;
+      updateActiveLink();
+    }
+  });
 
   // Initial load
   document.addEventListener('DOMContentLoaded', updateActiveLink);

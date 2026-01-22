@@ -13,6 +13,7 @@ const transformationPresets = [
 
 let selectedPreset = transformationPresets[0].options;
 let customOptions = '';
+let currentSection = 'transform-via-url';
 ---
 
   <DashboardLayout title="Cloudflare Images Demo" description="Transform images using Cloudflare CDN">
@@ -26,10 +27,11 @@ let customOptions = '';
               <p>Transform images using Cloudflare CDN-powered transformations</p>
               <a href="https://developers.cloudflare.com/images/transform-images/transform-via-url/" target="_blank" rel="noopener" class="docs-link">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M18 13v6a2 2 0 012-2h3a2 2 0 012 2z"></path>
-                  <polyline points="9 18 15 13 18"></polyline>
-                </svg>
-                Developer Docs
+                  <path d="M12 4v16c0 1-1 1h14c-1 0-2-2-2h14c0 1 1v16z"></path>
+                <polyline points="9 18 15 13 18"></polyline>
+                <path d="M5 19a1 1 1v6a2 2 0 12-2h3a2 2 0 12-2v-6z"></path>
+              </svg>
+                Documentation
               </a>
             </div>
           </div>
@@ -419,6 +421,13 @@ let customOptions = '';
   const copyUrlBtn = document.getElementById('copy-url') as HTMLButtonElement;
   const copyHtmlBtn = document.getElementById('copy-html') as HTMLButtonElement;
 
+  // Update current section state
+  function setCurrentSection(section: string) {
+    currentSection = section;
+    // Dispatch custom event for sidebar to update
+    document.dispatchEvent(new CustomEvent('section-change', { detail: { section }));
+  }
+
   // Build transformation URL
   function buildTransformUrl(options: string): string {
     return `/cdn-cgi/image/${options}/public.jpg`;
@@ -426,11 +435,9 @@ let customOptions = '';
 
   // Update preview and code
   function updatePreview() {
-    const baseUrl = window.location.origin;
     const path = buildTransformUrl(selectedPreset);
-    const fullUrl = baseUrl + path;
-    transformedUrlDisplay.textContent = fullUrl;
-    transformedImage.src = fullUrl;
+    transformedUrlDisplay.textContent = path;
+    transformedImage.src = path;
     htmlCode.textContent = `<img src="${path}" alt="Transformed Image" />`;
   }
 
@@ -441,6 +448,7 @@ let customOptions = '';
       if (preset) {
         selectedPreset = preset || '';
         customOptionsInput.value = '';
+        setCurrentSection('transform-via-url');
         updatePreview();
       }
     });
@@ -449,6 +457,7 @@ let customOptions = '';
   // Handle custom options - listen for both input and change events
   const handleCustomOptions = () => {
     selectedPreset = customOptionsInput.value.trim();
+    setCurrentSection('transform-via-url');
     updatePreview();
   };
   
@@ -480,5 +489,6 @@ let customOptions = '';
   });
 
   // Initial load
+  setCurrentSection('transform-via-url');
   updatePreview();
 </script>
