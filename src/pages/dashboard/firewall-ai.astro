@@ -678,10 +678,7 @@ const testPrompts = [
 
     const bubbleDiv = document.createElement('div');
     bubbleDiv.className = 'message-bubble';
-    if (role === 'error') {
-      bubbleDiv.innerHTML = `<span class="error-icon">🛑</span> ${content}`;
-    } else {
-      bubbleDiv.textContent = content;
+    bubbleDiv.innerHTML = content.replace(/\n/g, '<br>');
     }
 
     messageDiv.appendChild(labelDiv);
