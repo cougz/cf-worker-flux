@@ -19,17 +19,27 @@ const testPrompts = [
       <div class="chat-container">
         <!-- Header -->
         <div class="chat-header">
-          <div class="chat-header-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-              <path d="M2 17l10 5 10-5"></path>
-              <path d="M2 12l10 5 10-5"></path>
+          <div class="chat-header-left">
+            <div class="chat-header-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <div class="chat-header-text">
+              <h1>Firewall for AI Demo</h1>
+              <p>Macrodata Refinement Assistant</p>
+            </div>
+          </div>
+          <button id="clear-chat" class="clear-chat-button" aria-label="Clear chat history">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
             </svg>
-          </div>
-          <div class="chat-header-text">
-            <h1>Firewall for AI Demo</h1>
-            <p>Macrodata Refinement Assistant</p>
-          </div>
+            Clear
+          </button>
         </div>
 
         <!-- Messages Area -->
@@ -105,10 +115,17 @@ const testPrompts = [
   .chat-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 16px;
     padding: 20px 24px;
     background: linear-gradient(135deg, var(--cf-orange) 0%, var(--cf-orange-light) 100%);
     color: white;
+  }
+
+  .chat-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
   }
 
   .chat-header-icon {
@@ -119,6 +136,31 @@ const testPrompts = [
     height: 48px;
     background: rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-md);
+  }
+
+  .clear-chat-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+  }
+
+  .clear-chat-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .clear-chat-button:active {
+    transform: translateY(0);
   }
 
   .chat-header-text h1 {
@@ -426,6 +468,7 @@ const testPrompts = [
   const sendButton = document.getElementById('send-button') as HTMLButtonElement;
   const typingIndicator = document.getElementById('typing-indicator') as HTMLDivElement;
   const testPromptButtons = document.querySelectorAll('.test-prompt-button');
+  const clearChatButton = document.getElementById('clear-chat') as HTMLButtonElement;
 
   // Auto-resize textarea
   function autoResize() {
@@ -445,6 +488,12 @@ const testPrompts = [
 
   // Send button click
   sendButton.addEventListener('click', sendMessage);
+
+  // Clear chat button
+  clearChatButton.addEventListener('click', () => {
+    conversationHistory = [];
+    messagesContainer.innerHTML = '';
+  });
 
   // Test prompt buttons
   testPromptButtons.forEach((button) => {

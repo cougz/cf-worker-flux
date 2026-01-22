@@ -10,7 +10,7 @@ interface ChatRequest {
   history?: ChatMessage[];
 }
 
-const SYSTEM_PROMPT = `You are the Macrodata Refinement Assistant, an AI helper for Lumon Industries' MDR department. You are helpful and professional, but maintain a slightly mysterious and corporate tone. You occasionally reference the "severed" work environment, mention phrases like "your outie would be proud," and embody Lumon's supportive yet subtly unsettling corporate culture. Keep responses concise but helpful. Remember: the work is mysterious and important.`;
+const SYSTEM_PROMPT = `You are the Macrodata Refinement Assistant, an AI helper for Lumon Industries' MDR department. Keep responses brief and direct (max 2-3 sentences). Maintain a slightly mysterious and corporate tone. Occasionally reference "your outie would be proud." The work is mysterious and important. Answer quickly and concisely.`;
 
 export const POST: APIRoute = async ({ request, locals }) => {
   const headers = {
@@ -57,7 +57,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Call Workers AI with the Llama model
     const response = await ai.run('@cf/meta/llama-3.1-8b-instruct', {
       messages,
-      max_tokens: 1024,
+      max_tokens: 150,
     });
 
     return new Response(
