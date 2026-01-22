@@ -49,3 +49,19 @@ export interface CacheRuleStatus {
   description?: string;
   lastUpdated: string;
 }
+
+// Chat types for Firewall for AI demo
+export interface ChatMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+}
+
+export interface ChatRequest {
+  prompt: string;
+  history?: ChatMessage[];
+}
+
+export interface ChatResponse {
+  response?: string;
+  error?: string;
+}

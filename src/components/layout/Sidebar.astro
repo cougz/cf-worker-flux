@@ -1,11 +1,6 @@
 ---
 const sections = [
-  { id: 'overview', label: 'Overview', path: '/' },
-  { id: 'resources', label: 'Resources', path: '/dashboard/resources' },
-  { id: 'configuration', label: 'Configuration', path: '/dashboard/configuration' },
-  { id: 'analytics', label: 'Analytics', path: '/dashboard/analytics' },
-  { id: 'caching', label: 'Caching', path: '/dashboard/caching' },
-  { id: 'settings', label: 'Settings', path: '/dashboard/settings' },
+  { id: 'firewall-ai', label: 'Firewall for AI', path: '/dashboard/firewall-ai' },
 ];
 ---
 
@@ -93,10 +88,8 @@ const sections = [
     const currentPath = window.location.pathname;
     
     // Determine current section from path
-    let currentSection = 'overview';
-    if (currentPath === '/') {
-      currentSection = 'overview';
-    } else {
+    let currentSection = 'firewall-ai';
+    if (currentPath !== '/') {
       const pathParts = currentPath.split('/').filter(Boolean);
       if (pathParts.length >= 2 && pathParts[0] === 'dashboard') {
         currentSection = pathParts[1];
