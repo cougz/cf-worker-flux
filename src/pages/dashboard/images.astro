@@ -57,10 +57,11 @@ let currentSection = 'transform-via-url';
                 <div class="control-group">
                   <label class="control-label">Quick Presets</label>
                   <div class="preset-buttons">
-                    {transformationPresets.map((preset) => (
+                  {transformationPresets.map((preset) => (
                       <button
                         class={`preset-btn ${selectedPreset === preset.options ? 'active' : ''}`}
-                        data-preset={preset.options}
+                        data-preset={preset.id}
+                        data-preset-value={preset.options}
                       >
                         {preset.label}
                       </button>
@@ -459,10 +460,13 @@ let currentSection = 'transform-via-url';
     selectedPreset = customOptionsInput.value.trim();
     setCurrentSection('transform-via-url');
     updatePreview();
-  };
+  }
   
   customOptionsInput.addEventListener('input', handleCustomOptions);
   customOptionsInput.addEventListener('change', handleCustomOptions);
+
+  // Copy URL
+  copyUrlBtn.addEventListener('click', async () => {
 
   // Copy URL
   copyUrlBtn.addEventListener('click', async () => {
