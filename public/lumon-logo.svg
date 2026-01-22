@@ -1,80 +1,76 @@
-<svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="600" fill="#000000"/>
+<svg viewBox="0 0 1600 800" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="800" fill="#000000"/>
 
-  <g transform="translate(600, 300)">
-    <ellipse cx="0" cy="0" rx="480" ry="220"
+  <g transform="translate(800, 400)">
+    <ellipse cx="0" cy="0" rx="600" ry="260"
              fill="none"
              stroke="#ffffff"
-             stroke-width="11"/>
+             stroke-width="13"/>
 
-    <line x1="-480" y1="-110" x2="480" y2="-110" stroke="#ffffff" stroke-width="9"/>
-    <line x1="-480" y1="0" x2="480" y2="0" stroke="#ffffff" stroke-width="9"/>
-    <line x1="-480" y1="110" x2="480" y2="110" stroke="#ffffff" stroke-width="9"/>
+    <line x1="-600" y1="-130" x2="600" y2="-130" stroke="#ffffff" stroke-width="11"/>
+    <line x1="-600" y1="0" x2="600" y2="0" stroke="#ffffff" stroke-width="11"/>
+    <line x1="-600" y1="130" x2="600" y2="130" stroke="#ffffff" stroke-width="11"/>
 
-    <path d="M -420,-140 Q -465,-70 -475,0 Q -465,70 -420,140"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -100,-255 C -110,-170 -115,-85 -118,0 C -115,85 -110,170 -100,255"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M 100,-255 C 110,-170 115,-85 118,0 C 115,85 110,170 100,255"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
 
-    <path d="M -320,-180 Q -360,-90 -370,0 Q -360,90 -320,180"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -250,-252 C -275,-168 -290,-84 -300,0 C -290,84 -275,168 -250,252"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M 250,-252 C 275,-168 290,-84 300,0 C 290,84 275,168 250,252"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
 
-    <path d="M -200,-210 Q -220,-105 -225,0 Q -220,105 -200,210"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -400,-235 C -440,-157 -465,-79 -480,0 C -465,79 -440,157 -400,235"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M 400,-235 C 440,-157 465,-79 480,0 C 465,79 440,157 400,235"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
 
-    <path d="M -80,-218 Q -85,-109 -87,0 Q -85,109 -80,218"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -520,-185 C -565,-124 -585,-62 -595,0 C -585,62 -565,124 -520,185"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M 520,-185 C 565,-124 585,-62 595,0 C 585,62 565,124 520,185"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
 
-    <path d="M 80,-218 Q 85,-109 87,0 Q 85,109 80,218"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -520,-185 C -460,-215 -400,-235 -400,-235"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M -400,-235 C -325,-247 -250,-252 -250,-252"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M -250,-252 C -175,-256 -100,-255 -100,-255"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M -100,-255 C -50,-258 50,-258 100,-255"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M 100,-255 C 175,-256 250,-252 250,-252"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M 250,-252 C 325,-247 400,-235 400,-235"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M 400,-235 C 460,-215 520,-185 520,-185"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
 
-    <path d="M 200,-210 Q 220,-105 225,0 Q 220,105 200,210"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
+    <path d="M -520,185 C -460,215 -400,235 -400,235"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M -400,235 C -325,247 -250,252 -250,252"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M -250,252 C -175,256 -100,255 -100,255"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M -100,255 C -50,258 50,258 100,255"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M 100,255 C 175,256 250,252 250,252"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M 250,252 C 325,247 400,235 400,235"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
+    <path d="M 400,235 C 460,215 520,185 520,185"
+          fill="none" stroke="#ffffff" stroke-width="11"/>
 
-    <path d="M 320,-180 Q 360,-90 370,0 Q 360,90 320,180"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-
-    <path d="M 420,-140 Q 465,-70 475,0 Q 465,70 420,140"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-
-    <path d="M -420,-140 Q -370,-160 -320,-180"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M -320,-180 Q -260,-195 -200,-210"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M -200,-210 Q -140,-217 -80,-218"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M -80,-218 Q 0,-220 80,-218"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M 80,-218 Q 140,-217 200,-210"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M 200,-210 Q 260,-195 320,-180"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M 320,-180 Q 370,-160 420,-140"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-
-    <path d="M -420,140 Q -370,160 -320,180"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M -320,180 Q -260,195 -200,210"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M -200,210 Q -140,217 -80,218"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M -80,218 Q 0,220 80,218"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M 80,218 Q 140,217 200,210"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M 200,210 Q 260,195 320,180"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-    <path d="M 320,180 Q 370,160 420,140"
-          fill="none" stroke="#ffffff" stroke-width="9"/>
-
-    <text x="0" y="45"
+    <text x="0" y="55"
           font-family="'Arial Black', 'Arial Bold', Arial, sans-serif"
-          font-size="145"
+          font-size="175"
           font-weight="900"
           fill="#ffffff"
           text-anchor="middle"
-          letter-spacing="20">LUMON</text>
+          letter-spacing="28">LUMON</text>
 
-    <g transform="translate(105, 5)">
-      <path d="M 0,-28 C -12,-16 -14,-4 -14,8 C -14,20 -8,28 0,35 C 8,28 14,20 14,8 C 14,-4 12,-16 0,-28 Z"
+    <g transform="translate(138, 2)">
+      <path d="M 0,-38 C -16,-22 -20,-10 -20,8 C -20,26 -13,38 0,48 C 13,38 20,26 20,8 C 20,-10 16,-22 0,-38 Z"
             fill="#000000"/>
     </g>
   </g>

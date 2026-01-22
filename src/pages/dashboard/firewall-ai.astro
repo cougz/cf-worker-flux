@@ -49,30 +49,30 @@ const testPrompts = [
       <div class="chat-container">
         <!-- Header -->
         <div class="chat-header">
-          <div class="chat-header-left">
-            <div class="chat-header-icon">
-              <img src="/lumon-logo.svg" alt="Lumon Industries Logo" width="48" height="48" />
-            </div>
-            <div class="chat-header-text">
-              <h1>Firewall for AI Demo</h1>
-              <p>Macrodata Refinement Assistant</p>
-              <div class="chat-header-meta">
-                <span class="clearance-badge">CLEARANCE: MDR-2</span>
-                <span class="status-indicator">
-                  <span class="status-dot"></span>
-                  REFINEMENT ACTIVE
-                </span>
-              </div>
+          <div class="chat-header-text">
+            <h1>Firewall for AI Demo</h1>
+            <p>Macrodata Refinement Assistant</p>
+            <div class="chat-header-meta">
+              <span class="clearance-badge">CLEARANCE: MDR-2</span>
+              <span class="status-indicator">
+                <span class="status-dot"></span>
+                REFINEMENT ACTIVE
+              </span>
             </div>
           </div>
-          <button id="clear-chat" class="clear-chat-button" aria-label="Clear chat history">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M3 6h18"></path>
-              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-            </svg>
-            Clear
-          </button>
+          <div class="chat-header-right">
+            <div class="chat-header-icon">
+              <img src="/lumon-logo.svg" alt="Lumon Industries Logo" width="80" height="40" />
+            </div>
+            <button id="clear-chat" class="clear-chat-button" aria-label="Clear chat history">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18"></path>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+              </svg>
+              Clear
+            </button>
+          </div>
         </div>
 
         <!-- Messages Area -->
@@ -167,26 +167,20 @@ const testPrompts = [
     color: white;
   }
 
-  .chat-header-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
   .chat-header-icon {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-md);
   }
 
   .chat-header-icon img {
-    width: 48px;
-    height: 24px;
-    border-radius: 4px;
+    width: 80px;
+    height: 40px;
+  }
+
+  .chat-header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
   }
 
   .clear-chat-button {
