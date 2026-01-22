@@ -1,7 +1,14 @@
 ---
 const sections = [
+  { 
+    id: 'images', 
+    label: 'Images', 
+    path: '/dashboard/images',
+    subsections: [
+      { id: 'transform-via-url', label: 'Transform via URL', path: '/dashboard/images' }
+    ]
+  },
   { id: 'firewall-ai', label: 'Firewall for AI', path: '/dashboard/firewall-ai' },
-  { id: 'images', label: 'Images', path: '/dashboard/images' },
 ];
 ---
 
@@ -9,7 +16,7 @@ const sections = [
   <div class="sidebar-title">Navigation</div>
   <ul class="sidebar-nav">
     {sections.map((section) => (
-      <li>
+      <li class={section.subsections ? 'nav-item-with-subsections' : ''}>
         <a
           href={section.path}
           data-section={section.id}
@@ -17,6 +24,21 @@ const sections = [
         >
           {section.label}
         </a>
+        {section.subsections && (
+          <ul class="subsection-nav">
+            {section.subsections.map((subsection) => (
+              <li>
+                <a
+                  href={subsection.path}
+                  data-section={subsection.id}
+                  data-astro-prefetch
+                >
+                  {subsection.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </li>
     ))}
   </ul>
@@ -74,6 +96,41 @@ const sections = [
     color: white;
   }
 
+  .nav-item-with-subsections {
+    padding-bottom: 8px;
+  }
+
+  .subsection-nav {
+    list-style: none;
+    padding-left: 20px;
+    margin-top: 5px;
+  }
+
+  .subsection-nav li {
+    margin-bottom: 3px;
+  }
+
+  .subsection-nav a {
+    display: block;
+    padding: 6px 10px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-size: 0.85em;
+    font-weight: 500;
+  }
+
+  .subsection-nav a:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .subsection-nav a.active {
+    background: var(--cf-orange);
+    color: white;
+  }
+
   @media (max-width: 768px) {
     .sidebar {
       width: 100%;
@@ -86,10 +143,11 @@ const sections = [
 <script>
   function updateActiveLink() {
     const links = document.querySelectorAll('[data-section]');
+    const subsectionLinks = document.querySelectorAll('[data-section]');
     const currentPath = window.location.pathname;
 
     // Determine current section from path
-    let currentSection = 'firewall-ai';
+    let currentSection = 'images';
     if (currentPath !== '/') {
       const pathParts = currentPath.split('/').filter(Boolean);
       if (pathParts.length >= 2 && pathParts[0] === 'dashboard') {
@@ -97,14 +155,26 @@ const sections = [
       }
     }
 
-    // Update active states
+    // Update active states for main links
     links.forEach((link) => {
       const section = link.getAttribute('data-section');
-      if (section === currentSection) {
-        link.classList.add('active');
+      const isParent = link.parentElement.classList.contains('nav-item-with-subsections');
+      const isActive = section === currentSection;
+
+      if (isParent) {
+        // Don't highlight parent when subsection is active
+        if (!subsectionLinks.some(sub => sub.getAttribute('data-section') === currentSection)) {
+          link.classList.toggle('active', isActive);
+        }
       } else {
-        link.classList.remove('active');
+        link.classList.toggle('active', isActive);
       }
+    });
+
+    // Update active states for subsections
+    subsectionLinks.forEach((link) => {
+      const subsection = link.getAttribute('data-section');
+      link.classList.toggle('active', subsection === currentSection);
     });
   }
 

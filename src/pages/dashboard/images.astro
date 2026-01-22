@@ -20,17 +20,26 @@ let customOptions = '';
     <Sidebar />
     <div class="module-content-wrapper">
       <div class="images-demo">
-        <div class="images-header">
-          <h1>Cloudflare Images Demo</h1>
-          <p>Transform images using Cloudflare CDN-powered transformations</p>
-        </div>
+          <div class="images-header">
+            <div class="header-content">
+              <h1>Cloudflare Images Demo</h1>
+              <p>Transform images using Cloudflare CDN-powered transformations</p>
+              <a href="https://developers.cloudflare.com/images/transform-images/transform-via-url/" target="_blank" rel="noopener" class="docs-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 012-2h3a2 2 0 012 2z"></path>
+                  <polyline points="9 18 15 13 18"></polyline>
+                </svg>
+                Developer Docs
+              </a>
+            </div>
+          </div>
 
         <div class="images-layout">
           <div class="images-left-panel">
             <div class="panel-section">
               <h2>Original Image</h2>
               <div class="image-preview original-image">
-                <img src="/public.jpg" alt="Original Image" id="original-image" />
+                <img src="/public/public.jpg" alt="Original Image" id="original-image" />
                 <div class="image-info">
                   <span class="image-label">File:</span>
                   <span class="image-value">public.jpg</span>
@@ -90,25 +99,18 @@ let customOptions = '';
             </div>
 
             <div class="panel-section">
-              <h2>HTML Markup</h2>
+              <h2>CDN URI</h2>
               <div class="code-block">
-                <pre><code id="html-code">&lt;img src="/cdn-cgi/image/width=800,height=600/public.jpg" alt="Transformed Image" /&gt;</code></pre>
-                <button id="copy-html" class="copy-btn">Copy HTML</button>
+                <pre><code id="transformed-url-display">https://your-domain.com/cdn-cgi/image/width=800,height=600/public.jpg</code></pre>
+                <button id="copy-url" class="copy-btn">Copy URI</button>
               </div>
             </div>
 
             <div class="panel-section">
-              <h2>Size Comparison</h2>
-              <div class="size-comparison">
-                <div class="size-item">
-                  <span class="size-label">Original:</span>
-                  <span class="size-value large">~2.3 MB</span>
-                </div>
-                <div class="size-arrow">→</div>
-                <div class="size-item">
-                  <span class="size-label">Transformed:</span>
-                  <span class="size-value small">~245 KB</span>
-                </div>
+              <h2>HTML Markup</h2>
+              <div class="code-block">
+                <pre><code id="html-code">&lt;img src="/cdn-cgi/image/width=800,height=600/public.jpg" alt="Transformed Image" /&gt;</code></pre>
+                <button id="copy-html" class="copy-btn">Copy HTML</button>
               </div>
             </div>
           </div>
@@ -411,7 +413,7 @@ let customOptions = '';
   // DOM Elements
   const presetButtons = document.querySelectorAll('[data-preset]');
   const customOptionsInput = document.getElementById('custom-options') as HTMLTextAreaElement;
-  const transformedUrl = document.getElementById('transformed-url') as HTMLElement;
+  const transformedUrlDisplay = document.getElementById('transformed-url-display') as HTMLElement;
   const transformedImage = document.getElementById('transformed-image') as HTMLImageElement;
   const htmlCode = document.getElementById('html-code') as HTMLElement;
   const copyUrlBtn = document.getElementById('copy-url') as HTMLButtonElement;
@@ -424,10 +426,12 @@ let customOptions = '';
 
   // Update preview and code
   function updatePreview() {
-    const url = buildTransformUrl(selectedPreset);
-    transformedUrl.textContent = url;
-    transformedImage.src = url;
-    htmlCode.textContent = `<img src="${url}" alt="Transformed Image" />`;
+    const baseUrl = window.location.origin;
+    const path = buildTransformUrl(selectedPreset);
+    const fullUrl = baseUrl + path;
+    transformedUrlDisplay.textContent = fullUrl;
+    transformedImage.src = fullUrl;
+    htmlCode.textContent = `<img src="${path}" alt="Transformed Image" />`;
   }
 
   // Handle preset selection
@@ -442,22 +446,23 @@ let customOptions = '';
     });
   });
 
-  // Handle custom options
-  customOptionsInput.addEventListener('input', () => {
-    customOptionsInput.addEventListener('change', () => {
-      selectedPreset = customOptionsInput.value.trim();
-      updatePreview();
-    });
-  });
+  // Handle custom options - listen for both input and change events
+  const handleCustomOptions = () => {
+    selectedPreset = customOptionsInput.value.trim();
+    updatePreview();
+  };
+  
+  customOptionsInput.addEventListener('input', handleCustomOptions);
+  customOptionsInput.addEventListener('change', handleCustomOptions);
 
   // Copy URL
   copyUrlBtn.addEventListener('click', async () => {
-    const url = transformedUrl.textContent || '';
+    const url = transformedUrlDisplay.textContent || '';
     if (url) {
       await navigator.clipboard.writeText(url);
       copyUrlBtn.textContent = 'Copied!';
       setTimeout(() => {
-        copyUrlBtn.textContent = 'Copy';
+        copyUrlBtn.textContent = 'Copy URI';
       }, 2000);
     }
   });
