@@ -15,7 +15,7 @@ let selectedPreset = transformationPresets[0].options;
 let customOptions = '';
 ---
 
-<DashboardLayout title="Cloudflare Images Demo" description="Transform images using Cloudflare CDN">
+  <DashboardLayout title="Cloudflare Images Demo" description="Transform images using Cloudflare CDN">
   <div class="module-wrapper">
     <Sidebar />
     <div class="module-content-wrapper">
@@ -25,7 +25,7 @@ let customOptions = '';
           <p>Transform images using Cloudflare CDN-powered transformations</p>
         </div>
 
-        <div class="images-content">
+        <div class="images-layout">
           <div class="images-left-panel">
             <div class="panel-section">
               <h2>Original Image</h2>
@@ -140,22 +140,23 @@ let customOptions = '';
     font-size: 1em;
   }
 
-  .images-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  .images-layout {
+    display: flex;
     gap: 24px;
+    flex: 1;
   }
 
   .images-left-panel {
+    flex: 0 0 auto;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
 
   .images-right-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    flex: 1;
+    min-width: 0;
   }
 
   .panel-section {
