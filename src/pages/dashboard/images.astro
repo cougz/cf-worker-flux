@@ -425,7 +425,7 @@ let currentSection = 'transform-via-url';
   function setCurrentSection(section: string) {
     currentSection = section;
     // Dispatch custom event for sidebar to update
-    document.dispatchEvent(new CustomEvent('section-change', { detail: { section }));
+    document.dispatchEvent(new CustomEvent('section-change', { detail: { section } }));
   }
 
   // Build transformation URL
@@ -463,9 +463,6 @@ let currentSection = 'transform-via-url';
   
   customOptionsInput.addEventListener('input', handleCustomOptions);
   customOptionsInput.addEventListener('change', handleCustomOptions);
-
-  // Copy URL
-  copyUrlBtn.addEventListener('click', async () => {
 
   // Copy URL
   copyUrlBtn.addEventListener('click', async () => {
