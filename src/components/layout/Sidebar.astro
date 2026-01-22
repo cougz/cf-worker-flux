@@ -1,6 +1,7 @@
 ---
 const sections = [
   { id: 'firewall-ai', label: 'Firewall for AI', path: '/dashboard/firewall-ai' },
+  { id: 'images', label: 'Images', path: '/dashboard/images' },
 ];
 ---
 
@@ -86,7 +87,7 @@ const sections = [
   function updateActiveLink() {
     const links = document.querySelectorAll('[data-section]');
     const currentPath = window.location.pathname;
-    
+
     // Determine current section from path
     let currentSection = 'firewall-ai';
     if (currentPath !== '/') {

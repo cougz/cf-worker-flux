@@ -1,0 +1,478 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Sidebar from '../../components/layout/Sidebar.astro';
+
+const transformationPresets = [
+  { id: 'resize', label: 'Resize 800×600', options: 'width=800,height=600' },
+  { id: 'webp', label: 'Format to WebP', options: 'format=webp,quality=80' },
+  { id: 'avif', label: 'Format to AVIF', options: 'format=avif,quality=85' },
+  { id: 'border', label: 'Add Orange Border', options: 'border=10,%23F48024' },
+  { id: 'grayscale', label: 'Convert to Grayscale', options: 'saturation=0' },
+  { id: 'brightness', label: 'Brighten +50%', options: 'brightness=1.5' },
+];
+
+let selectedPreset = transformationPresets[0].options;
+let customOptions = '';
+---
+
+<DashboardLayout title="Cloudflare Images Demo" description="Transform images using Cloudflare CDN">
+  <div class="module-wrapper">
+    <Sidebar />
+    <div class="module-content-wrapper">
+      <div class="images-demo">
+        <div class="images-header">
+          <h1>Cloudflare Images Demo</h1>
+          <p>Transform images using Cloudflare CDN-powered transformations</p>
+        </div>
+
+        <div class="images-content">
+          <div class="images-left-panel">
+            <div class="panel-section">
+              <h2>Original Image</h2>
+              <div class="image-preview original-image">
+                <img src="/public.jpg" alt="Original Image" id="original-image" />
+                <div class="image-info">
+                  <span class="image-label">File:</span>
+                  <span class="image-value">public.jpg</span>
+                  <span class="image-label">Dimensions:</span>
+                  <span class="image-value">1920×1080</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <h2>Transform Options</h2>
+              <div class="transform-controls">
+                <div class="control-group">
+                  <label class="control-label">Quick Presets</label>
+                  <div class="preset-buttons">
+                    {transformationPresets.map((preset) => (
+                      <button
+                        class={`preset-btn ${selectedPreset === preset.options ? 'active' : ''}`}
+                        data-preset={preset.options}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">Custom Options</label>
+                  <textarea
+                    id="custom-options"
+                    class="options-input"
+                    placeholder="width=800,height=600,format=webp..."
+                    value={customOptions}
+                  ></textarea>
+                  <div class="options-hint">
+                    Available options: width, height, format, quality, border, blur, brightness, contrast, fit, gravity, rotate, saturation, gamma, metadata, compression, dpr, sharpen
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">Preview URL</label>
+                  <div class="url-display">
+                    <code id="transformed-url">/cdn-cgi/image/width=800,height=600/public.jpg</code>
+                    <button id="copy-url" class="copy-btn">Copy</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="images-right-panel">
+            <div class="panel-section">
+              <h2>Transformed Preview</h2>
+              <div class="image-preview transformed-image">
+                <img src="/cdn-cgi/image/width=800,height=600/public.jpg" alt="Transformed Image" id="transformed-image" />
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <h2>HTML Markup</h2>
+              <div class="code-block">
+                <pre><code id="html-code">&lt;img src="/cdn-cgi/image/width=800,height=600/public.jpg" alt="Transformed Image" /&gt;</code></pre>
+                <button id="copy-html" class="copy-btn">Copy HTML</button>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <h2>Size Comparison</h2>
+              <div class="size-comparison">
+                <div class="size-item">
+                  <span class="size-label">Original:</span>
+                  <span class="size-value large">~2.3 MB</span>
+                </div>
+                <div class="size-arrow">→</div>
+                <div class="size-item">
+                  <span class="size-label">Transformed:</span>
+                  <span class="size-value small">~245 KB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </DashboardLayout>
+
+<style>
+  .images-demo {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .images-header {
+    margin-bottom: 24px;
+  }
+
+  .images-header h1 {
+    margin: 0 0 8px 0;
+    font-size: 2em;
+    color: var(--text-primary);
+  }
+
+  .images-header p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 1em;
+  }
+
+  .images-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .images-left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .images-right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .panel-section {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+
+  .panel-section h2 {
+    margin: 0 0 16px 0;
+    font-size: 1.25em;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-light);
+    padding-bottom: 12px;
+  }
+
+  .image-preview {
+    width: 100%;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+  }
+
+  .image-preview img {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+  }
+
+  .original-image img {
+    max-height: 400px;
+  }
+
+  .transformed-image img {
+    max-height: 400px;
+  }
+
+  .image-info {
+    margin-top: 16px;
+    padding: 12px;
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.9em;
+  }
+
+  .image-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .image-value {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .transform-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .control-label {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .preset-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+  }
+
+  .preset-btn {
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .preset-btn:hover {
+    border-color: var(--cf-orange);
+    background: var(--bg-primary);
+  }
+
+  .preset-btn.active {
+    background: var(--cf-orange);
+    color: white;
+    border-color: var(--cf-orange);
+  }
+
+  .options-input {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 0.85em;
+    resize: vertical;
+  }
+
+  .options-hint {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .url-display {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .url-display code {
+    flex: 1;
+    padding: 10px 12px;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 0.8em;
+    color: var(--text-primary);
+    overflow-x: auto;
+    white-space: pre;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    padding: 8px 16px;
+    background: var(--cf-orange);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .copy-btn:hover {
+    background: var(--cf-orange-dark);
+    transform: translateY(-2px);
+  }
+
+  .code-block {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    position: relative;
+  }
+
+  .code-block pre {
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  .code-block code {
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: 0.8em;
+    color: var(--text-primary);
+  }
+
+  .code-block .copy-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 6px 12px;
+  }
+
+  .size-comparison {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--cf-orange) 0%, var(--cf-orange-light) 100%);
+    border-radius: var(--radius-md);
+  }
+
+  .size-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .size-label {
+    font-size: 0.85em;
+    color: white;
+    opacity: 0.9;
+  }
+
+  .size-value {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: white;
+  }
+
+  .size-value.large {
+    color: #ff9999;
+  }
+
+  .size-value.small {
+    color: #4ade80;
+  }
+
+  .size-arrow {
+    font-size: 2em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    .images-content {
+      grid-template-columns: 1fr;
+    }
+
+    .preset-buttons {
+      grid-template-columns: 1fr;
+    }
+
+    .size-comparison {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+</style>
+
+<script>
+  // DOM Elements
+  const presetButtons = document.querySelectorAll('[data-preset]');
+  const customOptionsInput = document.getElementById('custom-options') as HTMLTextAreaElement;
+  const transformedUrl = document.getElementById('transformed-url') as HTMLElement;
+  const transformedImage = document.getElementById('transformed-image') as HTMLImageElement;
+  const htmlCode = document.getElementById('html-code') as HTMLElement;
+  const copyUrlBtn = document.getElementById('copy-url') as HTMLButtonElement;
+  const copyHtmlBtn = document.getElementById('copy-html') as HTMLButtonElement;
+
+  // Build transformation URL
+  function buildTransformUrl(options: string): string {
+    return `/cdn-cgi/image/${options}/public.jpg`;
+  }
+
+  // Update preview and code
+  function updatePreview() {
+    const url = buildTransformUrl(selectedPreset);
+    transformedUrl.textContent = url;
+    transformedImage.src = url;
+    htmlCode.textContent = `<img src="${url}" alt="Transformed Image" />`;
+  }
+
+  // Handle preset selection
+  presetButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const preset = btn.getAttribute('data-preset');
+      if (preset) {
+        selectedPreset = preset || '';
+        customOptionsInput.value = '';
+        updatePreview();
+      }
+    });
+  });
+
+  // Handle custom options
+  customOptionsInput.addEventListener('input', () => {
+    customOptionsInput.addEventListener('change', () => {
+      selectedPreset = customOptionsInput.value.trim();
+      updatePreview();
+    });
+  });
+
+  // Copy URL
+  copyUrlBtn.addEventListener('click', async () => {
+    const url = transformedUrl.textContent || '';
+    if (url) {
+      await navigator.clipboard.writeText(url);
+      copyUrlBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        copyUrlBtn.textContent = 'Copy';
+      }, 2000);
+    }
+  });
+
+  // Copy HTML
+  copyHtmlBtn.addEventListener('click', async () => {
+    const code = htmlCode.textContent || '';
+    if (code) {
+      await navigator.clipboard.writeText(code);
+      copyHtmlBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        copyHtmlBtn.textContent = 'Copy HTML';
+      }, 2000);
+    }
+  });
+
+  // Initial load
+  updatePreview();
+</script>
