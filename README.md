@@ -25,16 +25,23 @@ bun run preview
 
 ## Deployment
 
-The application automatically deploys to Cloudflare Pages:
+### GitHub Actions (Recommended)
+
+The application automatically deploys to Cloudflare Pages via GitHub Actions when pushing to `main` branch.
+
+**Required Secrets:**
+Add these to your GitHub repository settings under Settings > Secrets and variables > Actions:
+
+- `CLOUDFLARE_API_TOKEN` - API token with Cloudflare Pages permissions (Create at https://dash.cloudflare.com/profile/api-tokens)
+- `CLOUDFLARE_ACCOUNT_ID` - Your Cloudflare Account ID
+
+**Manual Deployment via GitHub Actions:**
+Go to Actions > Deploy to Cloudflare Pages > Run workflow
+
+### Local Deployment
 
 ```bash
 # Deploy to production (builds + deploys)
-bun run deploy
-```
-
-Or manually:
-```bash
-git pull
 bun run deploy
 ```
 
