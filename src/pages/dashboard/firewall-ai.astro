@@ -243,13 +243,42 @@ const testPrompts = [
   .message.error .message-bubble {
     background: #fee2e2;
     color: #991b1b;
-    border: 1px solid #fecaca;
+    border: 2px solid #ef4444;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
   }
 
   [data-theme="dark"] .message.error .message-bubble {
     background: #450a0a;
     color: #fecaca;
-    border: 1px solid #7f1d1d;
+    border: 2px solid #dc2626;
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+  }
+
+  .error-icon {
+    display: inline-block;
+    animation: alertPulse 1.5s ease-in-out infinite;
+    margin-right: 8px;
+    font-size: 1.2em;
+  }
+
+  @keyframes alertPulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+  }
+
+  .message.error .message-label {
+    color: #dc2626;
+    font-weight: 600;
+  }
+
+  [data-theme="dark"] .message.error .message-label {
+    color: #ef4444;
   }
 
   .message-label {
@@ -514,11 +543,19 @@ const testPrompts = [
 
     const labelDiv = document.createElement('div');
     labelDiv.className = 'message-label';
-    labelDiv.textContent = role === 'user' ? 'You' : role === 'error' ? 'Error' : 'Assistant';
+    if (role === 'error') {
+      labelDiv.innerHTML = '🚫 <strong>BLOCKED</strong>';
+    } else {
+      labelDiv.textContent = role === 'user' ? 'You' : 'Assistant';
+    }
 
     const bubbleDiv = document.createElement('div');
     bubbleDiv.className = 'message-bubble';
-    bubbleDiv.textContent = content;
+    if (role === 'error') {
+      bubbleDiv.innerHTML = `<span class="error-icon">🛑</span> ${content}`;
+    } else {
+      bubbleDiv.textContent = content;
+    }
 
     messageDiv.appendChild(labelDiv);
     messageDiv.appendChild(bubbleDiv);
