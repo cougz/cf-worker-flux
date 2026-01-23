@@ -1,12 +1,12 @@
 ---
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
 import Sidebar from '../../components/layout/Sidebar.astro';
+import Slider from '../../components/interactive/Slider.astro';
 
 const transformationPresets = [
   { id: 'resize', label: 'Resize 800×600' },
   { id: 'webp', label: 'Format to WebP' },
   { id: 'avif', label: 'Format to AVIF' },
-  { id: 'border', label: 'Add Orange Border' },
   { id: 'grayscale', label: 'Convert to Grayscale' },
   { id: 'brightness', label: 'Brighten +50%' },
 ];
@@ -65,6 +65,8 @@ const transformationPresets = [
                     ))}
                   </div>
                 </div>
+
+                <Slider id="quality" label="Quality" min={10} max={100} defaultValue={85} step={5} />
 
                 <div class="control-group">
                   <label class="control-label">Custom Options</label>
@@ -458,6 +460,7 @@ const transformationPresets = [
 <script>
   // State
   let selectedPreset = 'width=800,height=600';
+  let quality = 85;
 
   // DOM Elements
   const presetButtons = document.querySelectorAll('[data-preset]');
@@ -471,20 +474,21 @@ const transformationPresets = [
   const copyHtmlBtn = copyUrlBtns[2];
   const transformedDimensions = document.getElementById('transformed-dimensions') as HTMLElement;
   const transformedSize = document.getElementById('transformed-size') as HTMLElement;
+  const qualitySlider = document.getElementById('quality') as HTMLInputElement;
 
   // Preset options mapping
   const presetOptions: Record<string, string> = {
     'resize': 'width=800,height=600',
-    'webp': 'format=webp,quality=80',
-    'avif': 'format=avif,quality=85',
-    'border': 'border=10,%23F48024',
+    'webp': 'format=webp',
+    'avif': 'format=avif',
     'grayscale': 'saturation=0',
     'brightness': 'brightness=1.5',
   };
 
   // Build transformation URL
   function buildTransformUrl(options: string): string {
-    return `/cdn-cgi/image/${options}/source.jpg`;
+    const qualityParam = `,quality=${quality}`;
+    return `/cdn-cgi/image/${options}${qualityParam}/source.jpg`;
   }
 
   // Extract dimensions from transformation options
@@ -563,7 +567,13 @@ const transformationPresets = [
       updatePreview();
     }
   };
-  
+
+  // Handle quality slider change
+  qualitySlider.addEventListener('input', () => {
+    quality = parseInt(qualitySlider.value, 10);
+    updatePreview();
+  });
+
   customOptionsInput.addEventListener('input', handleCustomOptions);
   customOptionsInput.addEventListener('change', handleCustomOptions);
 
