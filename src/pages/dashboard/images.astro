@@ -405,18 +405,33 @@ const transformationPresets = [
     color: rgba(255, 255, 255, 0.5);
   }
 
+  @media (max-width: 1024px) {
+    .images-layout {
+      flex-direction: column;
+    }
+
+    .images-left-panel {
+      max-width: 100%;
+    }
+  }
+
   @media (max-width: 768px) {
-    .images-content {
-      grid-template-columns: 1fr;
+    .panel-section {
+      padding: 16px;
+    }
+
+    .image-preview {
+      min-height: 200px;
+    }
+
+    .image-preview img,
+    .original-image img,
+    .transformed-image img {
+      max-height: 250px;
     }
 
     .preset-buttons {
       grid-template-columns: 1fr;
-    }
-
-    .size-comparison {
-      flex-direction: column;
-      gap: 8px;
     }
   }
 </style>
