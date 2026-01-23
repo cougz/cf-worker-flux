@@ -3,17 +3,13 @@ import DashboardLayout from '../../layouts/DashboardLayout.astro';
 import Sidebar from '../../components/layout/Sidebar.astro';
 
 const transformationPresets = [
-  { id: 'resize', label: 'Resize 800×600', options: 'width=800,height=600' },
-  { id: 'webp', label: 'Format to WebP', options: 'format=webp,quality=80' },
-  { id: 'avif', label: 'Format to AVIF', options: 'format=avif,quality=85' },
-  { id: 'border', label: 'Add Orange Border', options: 'border=10,%23F48024' },
-  { id: 'grayscale', label: 'Convert to Grayscale', options: 'saturation=0' },
-  { id: 'brightness', label: 'Brighten +50%', options: 'brightness=1.5' },
+  { id: 'resize', label: 'Resize 800×600' },
+  { id: 'webp', label: 'Format to WebP' },
+  { id: 'avif', label: 'Format to AVIF' },
+  { id: 'border', label: 'Add Orange Border' },
+  { id: 'grayscale', label: 'Convert to Grayscale' },
+  { id: 'brightness', label: 'Brighten +50%' },
 ];
-
-let selectedPreset = transformationPresets[0].options;
-let customOptions = '';
-let currentSection = 'transform-via-url';
 ---
 
   <DashboardLayout title="Cloudflare Images Demo" description="Transform images using Cloudflare CDN">
@@ -57,9 +53,9 @@ let currentSection = 'transform-via-url';
                 <div class="control-group">
                   <label class="control-label">Quick Presets</label>
                   <div class="preset-buttons">
-                  {transformationPresets.map((preset) => (
+                  {transformationPresets.map((preset, index) => (
                       <button
-                        class={`preset-btn ${selectedPreset === preset.options ? 'active' : ''}`}
+                        class={`preset-btn ${index === 0 ? 'active' : ''}`}
                         data-preset={preset.id}
                       >
                         {preset.label}
@@ -74,7 +70,6 @@ let currentSection = 'transform-via-url';
                     id="custom-options"
                     class="options-input"
                     placeholder="width=800,height=600,format=webp..."
-                    value={customOptions}
                   ></textarea>
                   <div class="options-hint">
                     Available options: width, height, format, quality, border, blur, brightness, contrast, fit, gravity, rotate, saturation, gamma, metadata, compression, dpr, sharpen
@@ -412,6 +407,9 @@ let currentSection = 'transform-via-url';
 </style>
 
 <script>
+  // State
+  let selectedPreset = 'width=800,height=600';
+
   // DOM Elements
   const presetButtons = document.querySelectorAll('[data-preset]');
   const customOptionsInput = document.getElementById('custom-options') as HTMLTextAreaElement;
@@ -421,12 +419,15 @@ let currentSection = 'transform-via-url';
   const copyUrlBtn = document.getElementById('copy-url') as HTMLButtonElement;
   const copyHtmlBtn = document.getElementById('copy-html') as HTMLButtonElement;
 
-  // Update current section state
-  function setCurrentSection(section: string) {
-    currentSection = section;
-    // Dispatch custom event for sidebar to update
-    document.dispatchEvent(new CustomEvent('section-change', { detail: { section } }));
-  }
+  // Preset options mapping
+  const presetOptions: Record<string, string> = {
+    'resize': 'width=800,height=600',
+    'webp': 'format=webp,quality=80',
+    'avif': 'format=avif,quality=85',
+    'border': 'border=10,%23F48024',
+    'grayscale': 'saturation=0',
+    'brightness': 'brightness=1.5',
+  };
 
   // Build transformation URL
   function buildTransformUrl(options: string): string {
@@ -444,11 +445,13 @@ let currentSection = 'transform-via-url';
   // Handle preset selection
   presetButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      const preset = btn.getAttribute('data-preset');
-      if (preset) {
-        selectedPreset = preset || '';
+      const presetId = btn.getAttribute('data-preset');
+      if (presetId && presetOptions[presetId]) {
+        selectedPreset = presetOptions[presetId];
         customOptionsInput.value = '';
-        setCurrentSection('transform-via-url');
+        // Update active state on buttons
+        presetButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         updatePreview();
       }
     });
@@ -456,10 +459,14 @@ let currentSection = 'transform-via-url';
 
   // Handle custom options - listen for both input and change events
   const handleCustomOptions = () => {
-    selectedPreset = customOptionsInput.value.trim();
-    setCurrentSection('transform-via-url');
-    updatePreview();
-  }
+    const customValue = customOptionsInput.value.trim();
+    if (customValue) {
+      selectedPreset = customValue;
+      // Remove active state from preset buttons when using custom
+      presetButtons.forEach(b => b.classList.remove('active'));
+      updatePreview();
+    }
+  };
   
   customOptionsInput.addEventListener('input', handleCustomOptions);
   customOptionsInput.addEventListener('change', handleCustomOptions);
@@ -489,6 +496,5 @@ let currentSection = 'transform-via-url';
   });
 
   // Initial load
-  setCurrentSection('transform-via-url');
   updatePreview();
 </script>
