@@ -44,6 +44,8 @@ const transformationPresets = [
                 <span class="image-value">source.jpg</span>
                 <span class="image-label">Dimensions:</span>
                 <span class="image-value">1920×1080</span>
+                <span class="image-label">Size:</span>
+                <span class="image-value">999 KB</span>
               </div>
             </div>
 
@@ -92,6 +94,14 @@ const transformationPresets = [
               <h2>Transformed Preview</h2>
               <div class="image-preview transformed-image">
                 <img src="/cdn-cgi/image/width=800,height=600/source.jpg" alt="Transformed Image" id="transformed-image" />
+              </div>
+              <div class="image-info">
+                <span class="image-label">File:</span>
+                <span class="image-value">transformed</span>
+                <span class="image-label">Dimensions:</span>
+                <span class="image-value" id="transformed-dimensions">800×600</span>
+                <span class="image-label">Size:</span>
+                <span class="image-value" id="transformed-size">Loading...</span>
               </div>
             </div>
 
@@ -459,6 +469,8 @@ const transformationPresets = [
   const copyUrlBtn = copyUrlBtns[0];
   const copyUriBtn = copyUrlBtns[1];
   const copyHtmlBtn = copyUrlBtns[2];
+  const transformedDimensions = document.getElementById('transformed-dimensions') as HTMLElement;
+  const transformedSize = document.getElementById('transformed-size') as HTMLElement;
 
   // Preset options mapping
   const presetOptions: Record<string, string> = {
@@ -475,12 +487,55 @@ const transformationPresets = [
     return `/cdn-cgi/image/${options}/source.jpg`;
   }
 
+  // Extract dimensions from transformation options
+  function getDimensions(options: string): { width: number; height: number } | null {
+    const widthMatch = options.match(/width=(\d+)/);
+    const heightMatch = options.match(/height=(\d+)/);
+
+    if (widthMatch && heightMatch) {
+      return {
+        width: parseInt(widthMatch[1], 10),
+        height: parseInt(heightMatch[1], 10),
+      };
+    }
+    return null;
+  }
+
+  // Fetch file size of transformed image
+  async function fetchImageSize(url: string): Promise<void> {
+    transformedSize.textContent = 'Loading...';
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      const contentLength = response.headers.get('Content-Length');
+      if (contentLength) {
+        const bytes = parseInt(contentLength, 10);
+        const kb = (bytes / 1024).toFixed(1);
+        transformedSize.textContent = `${kb} KB`;
+      } else {
+        transformedSize.textContent = 'Unknown';
+      }
+    } catch (error) {
+      transformedSize.textContent = 'Unknown';
+    }
+  }
+
   // Update preview and code
   function updatePreview() {
     const path = buildTransformUrl(selectedPreset);
     transformedUrlDisplay.textContent = path;
     transformedImage.src = path;
     htmlCode.textContent = `<img src="${path}" alt="Transformed Image" />`;
+
+    // Update dimensions display
+    const dims = getDimensions(selectedPreset);
+    if (dims) {
+      transformedDimensions.textContent = `${dims.width}×${dims.height}`;
+    } else {
+      transformedDimensions.textContent = '1920×1080';
+    }
+
+    // Fetch transformed image size
+    fetchImageSize(path);
   }
 
   // Handle preset selection
