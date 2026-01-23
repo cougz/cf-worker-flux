@@ -383,17 +383,30 @@ const testPrompts = [
   }
 
   .message-label {
-    font-size: 0.75rem;
-    color: var(--text-primary);
-    margin-bottom: 4px;
-    padding: 0 4px;
+    font-size: 0.7rem;
+    color: var(--cf-orange);
+    margin-bottom: 6px;
+    padding: 4px 8px;
     font-weight: 700 !important;
     text-transform: uppercase;
     letter-spacing: 1px;
+    background: rgba(244, 128, 36, 0.1);
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  [data-theme="dark"] .message-label {
+    background: rgba(244, 128, 36, 0.2);
   }
 
   .message.user .message-label {
-    text-align: right;
+    background: var(--cf-orange);
+    color: white;
+  }
+
+  .message.assistant .message-label {
+    background: var(--bg-secondary);
+    border: 1px solid var(--cf-orange);
   }
 
   /* Typing Indicator */
