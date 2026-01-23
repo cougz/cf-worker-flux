@@ -581,7 +581,9 @@ const testPrompts = [
   /* Responsive */
   @media (max-width: 768px) {
     .chat-container {
-      height: calc(100vh - 140px);
+      height: auto;
+      min-height: 60vh;
+      max-height: calc(100vh - 120px);
     }
 
     .chat-header {
