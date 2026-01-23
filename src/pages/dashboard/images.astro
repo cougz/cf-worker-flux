@@ -171,6 +171,9 @@ const transformationPresets = [
   .images-right-panel {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 
   .panel-section {
@@ -218,10 +221,11 @@ const transformationPresets = [
     padding: 12px;
     background: var(--bg-primary);
     border-radius: var(--radius-md);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 12px;
     font-size: 0.9em;
+    align-items: center;
   }
 
   .image-label {
@@ -431,7 +435,7 @@ const transformationPresets = [
     }
 
     .image-info {
-      flex-direction: column;
+      grid-template-columns: 1fr;
       gap: 8px;
     }
 
