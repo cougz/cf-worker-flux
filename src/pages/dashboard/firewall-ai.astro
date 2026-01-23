@@ -585,7 +585,37 @@ const testPrompts = [
     }
 
     .chat-header {
-      padding: 16px;
+      padding: 12px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .chat-header-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chat-header-right {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .chat-header-icon img {
+      width: 80px;
+      height: 40px;
+    }
+
+    .clear-chat-button {
+      padding: 8px 12px;
+      font-size: 0.8rem;
+    }
+
+    .chat-header-text h1 {
+      font-size: 1rem;
+    }
+
+    .chat-header-text p {
+      font-size: 0.8rem;
     }
 
     .chat-messages {
@@ -597,7 +627,16 @@ const testPrompts = [
     }
 
     .test-prompts-grid {
-      grid-template-columns: 1fr;
+      flex-direction: column;
+    }
+
+    .test-category-buttons {
+      flex-wrap: wrap;
+    }
+
+    .test-prompt-button {
+      font-size: 0.8rem;
+      padding: 6px 12px;
     }
 
     .message {
