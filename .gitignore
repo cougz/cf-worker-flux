@@ -4,3 +4,4 @@ dist/
 .env
 .wrangler/
 *.log
+error.png
