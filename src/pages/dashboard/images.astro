@@ -109,17 +109,17 @@ const transformationPresets = [
 
             <div class="panel-section">
               <h2>CDN URI</h2>
-              <div class="code-block">
-                <pre><code id="transformed-url-display">https://your-domain.com/cdn-cgi/image/width=800,height=600/source.jpg</code></pre>
-                <button id="copy-uri" class="copy-btn">Copy URI</button>
+              <div class="url-display">
+                <code id="transformed-url-display">https://your-domain.com/cdn-cgi/image/width=800,height=600/source.jpg</code>
+                <button id="copy-uri" class="copy-btn">Copy</button>
               </div>
             </div>
 
             <div class="panel-section">
               <h2>HTML Markup</h2>
-              <div class="code-block">
-                <pre><code id="html-code">&lt;img src="/cdn-cgi/image/width=800,height=600/source.jpg" alt="Transformed Image" /&gt;</code></pre>
-                <button id="copy-html" class="copy-btn">Copy HTML</button>
+              <div class="url-display">
+                <code id="html-code">&lt;img src="/cdn-cgi/image/width=800,height=600/source.jpg" alt="Transformed Image" /&gt;</code>
+                <button id="copy-html" class="copy-btn">Copy</button>
               </div>
             </div>
           </div>
@@ -355,32 +355,6 @@ const transformationPresets = [
     transform: translateY(-2px);
   }
 
-  .code-block {
-    background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    position: relative;
-  }
-
-  .code-block pre {
-    margin: 0;
-    overflow-x: auto;
-  }
-
-  .code-block code {
-    font-family: 'Monaco', 'Consolas', monospace;
-    font-size: 0.8em;
-    color: var(--text-primary);
-  }
-
-  .code-block .copy-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    padding: 6px 12px;
-  }
-
   .size-comparison {
     display: flex;
     align-items: center;
@@ -596,7 +570,7 @@ const transformationPresets = [
       await navigator.clipboard.writeText(url);
       copyUriBtn.textContent = 'Copied!';
       setTimeout(() => {
-        copyUriBtn.textContent = 'Copy URI';
+        copyUriBtn.textContent = 'Copy';
       }, 2000);
     }
   });
@@ -608,7 +582,7 @@ const transformationPresets = [
       await navigator.clipboard.writeText(code);
       copyHtmlBtn.textContent = 'Copied!';
       setTimeout(() => {
-        copyHtmlBtn.textContent = 'Copy HTML';
+        copyHtmlBtn.textContent = 'Copy';
       }, 2000);
     }
   });
