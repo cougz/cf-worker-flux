@@ -439,156 +439,177 @@ const transformationPresets = [
   let quality = 85;
 
   // DOM Elements
-  const presetButtons = document.querySelectorAll('[data-preset]');
-  const customOptionsInput = document.getElementById('custom-options') as HTMLTextAreaElement;
-  const transformedUrlDisplay = document.getElementById('transformed-url-display') as HTMLElement;
-  const transformedImage = document.getElementById('transformed-image') as HTMLImageElement;
-  const htmlCode = document.getElementById('html-code') as HTMLElement;
-  const copyUrlBtns = document.querySelectorAll('.copy-btn') as NodeListOf<HTMLButtonElement>;
-  const copyUrlBtn = copyUrlBtns[0];
-  const copyUriBtn = copyUrlBtns[1];
-  const copyHtmlBtn = copyUrlBtns[2];
-  const transformedDimensions = document.getElementById('transformed-dimensions') as HTMLElement;
-  const transformedSize = document.getElementById('transformed-size') as HTMLElement;
-  const qualitySlider = document.getElementById('quality') as HTMLInputElement;
+  let presetButtons: NodeListOf<Element>;
+  let customOptionsInput: HTMLTextAreaElement;
+  let transformedUrlDisplay: HTMLElement;
+  let transformedImage: HTMLImageElement;
+  let htmlCode: HTMLElement;
+  let copyUrlBtn: HTMLButtonElement;
+  let copyUriBtn: HTMLButtonElement;
+  let copyHtmlBtn: HTMLButtonElement;
+  let transformedDimensions: HTMLElement;
+  let transformedSize: HTMLElement;
+  let qualitySlider: HTMLInputElement;
 
-  // Preset options mapping
-  const presetOptions: Record<string, string> = {
-    'resize': 'width=800,height=600',
-    'webp': 'format=webp',
-    'avif': 'format=avif',
-    'grayscale': 'saturation=0',
-    'brightness': 'brightness=1.5',
-  };
+  function initImages() {
+    // DOM Elements
+    presetButtons = document.querySelectorAll('[data-preset]');
+    customOptionsInput = document.getElementById('custom-options') as HTMLTextAreaElement;
+    transformedUrlDisplay = document.getElementById('transformed-url-display') as HTMLElement;
+    transformedImage = document.getElementById('transformed-image') as HTMLImageElement;
+    htmlCode = document.getElementById('html-code') as HTMLElement;
+    const copyUrlBtns = document.querySelectorAll('.copy-btn') as NodeListOf<HTMLButtonElement>;
+    copyUrlBtn = copyUrlBtns[0];
+    copyUriBtn = copyUrlBtns[1];
+    copyHtmlBtn = copyUrlBtns[2];
+    transformedDimensions = document.getElementById('transformed-dimensions') as HTMLElement;
+    transformedSize = document.getElementById('transformed-size') as HTMLElement;
+    qualitySlider = document.getElementById('quality') as HTMLInputElement;
 
-  // Build transformation URL
-  function buildTransformUrl(options: string): string {
-    const qualityParam = `,quality=${quality}`;
-    return `/cdn-cgi/image/${options}${qualityParam}/source.jpg`;
-  }
+    // Preset options mapping
+    const presetOptions: Record<string, string> = {
+      'resize': 'width=800,height=600',
+      'webp': 'format=webp',
+      'avif': 'format=avif',
+      'grayscale': 'saturation=0',
+      'brightness': 'brightness=1.5',
+    };
 
-  // Extract dimensions from transformation options
-  function getDimensions(options: string): { width: number; height: number } | null {
-    const widthMatch = options.match(/width=(\d+)/);
-    const heightMatch = options.match(/height=(\d+)/);
-
-    if (widthMatch && heightMatch) {
-      return {
-        width: parseInt(widthMatch[1], 10),
-        height: parseInt(heightMatch[1], 10),
-      };
+    // Build transformation URL
+    function buildTransformUrl(options: string): string {
+      const qualityParam = `,quality=${quality}`;
+      return `/cdn-cgi/image/${options}${qualityParam}/source.jpg`;
     }
-    return null;
-  }
 
-  // Fetch file size of transformed image
-  async function fetchImageSize(url: string): Promise<void> {
-    transformedSize.textContent = 'Loading...';
-    try {
-      const response = await fetch(url, { method: 'HEAD' });
-      const contentLength = response.headers.get('Content-Length');
-      if (contentLength) {
-        const bytes = parseInt(contentLength, 10);
-        const kb = (bytes / 1024).toFixed(1);
-        transformedSize.textContent = `${kb} KB`;
-      } else {
+    // Extract dimensions from transformation options
+    function getDimensions(options: string): { width: number; height: number } | null {
+      const widthMatch = options.match(/width=(\d+)/);
+      const heightMatch = options.match(/height=(\d+)/);
+
+      if (widthMatch && heightMatch) {
+        return {
+          width: parseInt(widthMatch[1], 10),
+          height: parseInt(heightMatch[1], 10),
+        };
+      }
+      return null;
+    }
+
+    // Fetch file size of transformed image
+    async function fetchImageSize(url: string): Promise<void> {
+      transformedSize.textContent = 'Loading...';
+      try {
+        const response = await fetch(url, { method: 'HEAD' });
+        const contentLength = response.headers.get('Content-Length');
+        if (contentLength) {
+          const bytes = parseInt(contentLength, 10);
+          const kb = (bytes / 1024).toFixed(1);
+          transformedSize.textContent = `${kb} KB`;
+        } else {
+          transformedSize.textContent = 'Unknown';
+        }
+      } catch (error) {
         transformedSize.textContent = 'Unknown';
       }
-    } catch (error) {
-      transformedSize.textContent = 'Unknown';
-    }
-  }
-
-  // Update preview and code
-  function updatePreview() {
-    const path = buildTransformUrl(selectedPreset);
-    transformedUrlDisplay.textContent = window.location.origin + path;
-    transformedImage.src = path;
-    htmlCode.textContent = `<img src="${path}" alt="Transformed Image" />`;
-
-    // Update dimensions display
-    const dims = getDimensions(selectedPreset);
-    if (dims) {
-      transformedDimensions.textContent = `${dims.width}×${dims.height}`;
-    } else {
-      transformedDimensions.textContent = '1920×1080';
     }
 
-    // Fetch transformed image size
-    fetchImageSize(path);
-  }
+    // Update preview and code
+    function updatePreview() {
+      const path = buildTransformUrl(selectedPreset);
+      transformedUrlDisplay.textContent = window.location.origin + path;
+      transformedImage.src = path;
+      htmlCode.textContent = `<img src="${path}" alt="Transformed Image" />`;
 
-  // Handle preset selection
-  presetButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const presetId = btn.getAttribute('data-preset');
-      if (presetId && presetOptions[presetId]) {
-        selectedPreset = presetOptions[presetId];
-        customOptionsInput.value = '';
-        // Update active state on buttons
+      // Update dimensions display
+      const dims = getDimensions(selectedPreset);
+      if (dims) {
+        transformedDimensions.textContent = `${dims.width}×${dims.height}`;
+      } else {
+        transformedDimensions.textContent = '1920×1080';
+      }
+
+      // Fetch transformed image size
+      fetchImageSize(path);
+    }
+
+    // Handle preset selection
+    presetButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const presetId = btn.getAttribute('data-preset');
+        if (presetId && presetOptions[presetId]) {
+          selectedPreset = presetOptions[presetId];
+          customOptionsInput.value = '';
+          // Update active state on buttons
+          presetButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          updatePreview();
+        }
+      });
+    });
+
+    // Handle quality slider change
+    qualitySlider.addEventListener('input', () => {
+      quality = parseInt(qualitySlider.value, 10);
+      updatePreview();
+    });
+
+    // Handle custom options - listen for both input and change events
+    const handleCustomOptions = () => {
+      const customValue = customOptionsInput.value.trim();
+      if (customValue) {
+        selectedPreset = customValue;
+        // Remove active state from preset buttons when using custom
         presetButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
         updatePreview();
       }
+    };
+
+    customOptionsInput.addEventListener('input', handleCustomOptions);
+    customOptionsInput.addEventListener('change', handleCustomOptions);
+
+    // Copy URL
+    copyUrlBtn.addEventListener('click', async () => {
+      const url = (document.getElementById('transformed-url') as HTMLElement).textContent || '';
+      if (url) {
+        await navigator.clipboard.writeText(url);
+        copyUrlBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyUrlBtn.textContent = 'Copy';
+        }, 2000);
+      }
     });
-  });
 
-  // Handle quality slider change
-  qualitySlider.addEventListener('input', () => {
-    quality = parseInt(qualitySlider.value, 10);
+    // Copy URI
+    copyUriBtn.addEventListener('click', async () => {
+      const url = transformedUrlDisplay.textContent || '';
+      if (url) {
+        await navigator.clipboard.writeText(url);
+        copyUriBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyUriBtn.textContent = 'Copy';
+        }, 2000);
+      }
+    });
+
+    // Copy HTML
+    copyHtmlBtn.addEventListener('click', async () => {
+      const code = htmlCode.textContent || '';
+      if (code) {
+        await navigator.clipboard.writeText(code);
+        copyHtmlBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          copyHtmlBtn.textContent = 'Copy';
+        }, 2000);
+      }
+    });
+
+    // Initial load
     updatePreview();
-  });
-
-  // Handle custom options - listen for both input and change events
-  const handleCustomOptions = () => {
-    const customValue = customOptionsInput.value.trim();
-    if (customValue) {
-      selectedPreset = customValue;
-      // Remove active state from preset buttons when using custom
-      presetButtons.forEach(b => b.classList.remove('active'));
-      updatePreview();
-    }
-  };
-
-  customOptionsInput.addEventListener('input', handleCustomOptions);
-  customOptionsInput.addEventListener('change', handleCustomOptions);
-
-  // Copy URL
-  copyUrlBtn.addEventListener('click', async () => {
-    const url = (document.getElementById('transformed-url') as HTMLElement).textContent || '';
-    if (url) {
-      await navigator.clipboard.writeText(url);
-      copyUrlBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        copyUrlBtn.textContent = 'Copy';
-      }, 2000);
-    }
-  });
-
-  // Copy URI
-  copyUriBtn.addEventListener('click', async () => {
-    const url = transformedUrlDisplay.textContent || '';
-    if (url) {
-      await navigator.clipboard.writeText(url);
-      copyUriBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        copyUriBtn.textContent = 'Copy';
-      }, 2000);
-    }
-  });
-
-  // Copy HTML
-  copyHtmlBtn.addEventListener('click', async () => {
-    const code = htmlCode.textContent || '';
-    if (code) {
-      await navigator.clipboard.writeText(code);
-      copyHtmlBtn.textContent = 'Copied!';
-      setTimeout(() => {
-        copyHtmlBtn.textContent = 'Copy';
-      }, 2000);
-    }
-  });
+  }
 
   // Initial load
-  updatePreview();
+  document.addEventListener('DOMContentLoaded', initImages);
+
+  // View transitions
+  document.addEventListener('astro:page-load', initImages);
 </script>

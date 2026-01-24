@@ -692,62 +692,71 @@ const testPrompts = [
   let isLoading = false;
 
   // DOM Elements
-  const messagesContainer = document.getElementById('chat-messages') as HTMLDivElement;
-  const chatInput = document.getElementById('chat-input') as HTMLTextAreaElement;
-  const sendButton = document.getElementById('send-button') as HTMLButtonElement;
-  const typingIndicator = document.getElementById('typing-indicator') as HTMLDivElement;
-  const testPromptButtons = document.querySelectorAll('.test-prompt-button');
-  const clearChatButton = document.getElementById('clear-chat') as HTMLButtonElement;
+  let messagesContainer: HTMLDivElement;
+  let chatInput: HTMLTextAreaElement;
+  let sendButton: HTMLButtonElement;
+  let typingIndicator: HTMLDivElement;
+  let clearChatButton: HTMLButtonElement;
 
-  // Auto-resize textarea
-  function autoResize() {
-    chatInput.style.height = 'auto';
-    chatInput.style.height = Math.min(chatInput.scrollHeight, 150) + 'px';
-  }
+  function initChat() {
+    // DOM Elements
+    messagesContainer = document.getElementById('chat-messages') as HTMLDivElement;
+    chatInput = document.getElementById('chat-input') as HTMLTextAreaElement;
+    sendButton = document.getElementById('send-button') as HTMLButtonElement;
+    typingIndicator = document.getElementById('typing-indicator') as HTMLDivElement;
+    const testPromptButtons = document.querySelectorAll('.test-prompt-button');
+    clearChatButton = document.getElementById('clear-chat') as HTMLButtonElement;
 
-  chatInput.addEventListener('input', autoResize);
-
-  // Send message on Enter (Shift+Enter for newline)
-  chatInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
+    // Auto-resize textarea
+    function autoResize() {
+      chatInput.style.height = 'auto';
+      chatInput.style.height = Math.min(chatInput.scrollHeight, 150) + 'px';
     }
-  });
 
-  // Send button click
-  sendButton.addEventListener('click', sendMessage);
+    chatInput.addEventListener('input', autoResize);
 
-  // Clear chat button
-  clearChatButton.addEventListener('click', () => {
-    conversationHistory = [];
-    messagesContainer.innerHTML = '';
-  });
-
-  // Test prompt buttons
-  testPromptButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const prompt = button.getAttribute('data-prompt');
-      if (prompt) {
-        chatInput.value = prompt;
-        autoResize();
-        chatInput.focus();
+    // Send message on Enter (Shift+Enter for newline)
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
       }
     });
-  });
 
-  // Test prompt dropdown (mobile)
-  const testPromptSelect = document.getElementById('test-prompt-select') as HTMLSelectElement;
-  if (testPromptSelect) {
-    testPromptSelect.addEventListener('change', () => {
-      const prompt = testPromptSelect.value;
-      if (prompt) {
-        chatInput.value = prompt;
-        autoResize();
-        chatInput.focus();
-        testPromptSelect.value = '';
-      }
+    // Send button click
+    sendButton.addEventListener('click', sendMessage);
+
+    // Clear chat button
+    clearChatButton.addEventListener('click', () => {
+      conversationHistory = [];
+      messagesContainer.innerHTML = '';
     });
+
+    // Test prompt buttons
+    testPromptButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const prompt = button.getAttribute('data-prompt');
+        if (prompt) {
+          chatInput.value = prompt;
+          autoResize();
+          chatInput.focus();
+        }
+      });
+    });
+
+    // Test prompt dropdown (mobile)
+    const testPromptSelect = document.getElementById('test-prompt-select') as HTMLSelectElement;
+    if (testPromptSelect) {
+      testPromptSelect.addEventListener('change', () => {
+        const prompt = testPromptSelect.value;
+        if (prompt) {
+          chatInput.value = prompt;
+          autoResize();
+          chatInput.focus();
+          testPromptSelect.value = '';
+        }
+      });
+    }
   }
 
   // Add message to UI
@@ -863,4 +872,10 @@ const testPrompts = [
       chatInput.focus();
     }
   }
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', initChat);
+
+  // View transitions
+  document.addEventListener('astro:page-load', initChat);
 </script>
