@@ -2,6 +2,8 @@
 
 **Live Demo:** https://flux.cloudemo.org
 
+> **Note:** Most demos require your own domain to fully experience features. For example, Firewall for AI only works with WAF rules configured on your Cloudflare account.
+
 Interactive demos showcasing Cloudflare's powerful platform.
 
 ## Demos
