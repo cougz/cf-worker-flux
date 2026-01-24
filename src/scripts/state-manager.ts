@@ -58,7 +58,7 @@ export class StateManager {
     this.setLoading(actionName, true);
 
     try {
-      const response = await fetch(`/api/actions/${actionName}`, {
+      const response = await fetch(`/firewall-for-ai/api/actions/${actionName}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
