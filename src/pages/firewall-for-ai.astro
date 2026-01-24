@@ -699,6 +699,12 @@ const testPrompts = [
   let typingIndicator: HTMLDivElement;
   let clearChatButton: HTMLButtonElement;
 
+  function autoResize() {
+    if (!chatInput) return;
+    chatInput.style.height = 'auto';
+    chatInput.style.height = Math.min(chatInput.scrollHeight, 150) + 'px';
+  }
+
   function initChat() {
     if (isInitialized) return;
     isInitialized = true;
@@ -709,12 +715,6 @@ const testPrompts = [
     typingIndicator = document.getElementById('typing-indicator') as HTMLDivElement;
     const testPromptButtons = document.querySelectorAll('.test-prompt-button');
     clearChatButton = document.getElementById('clear-chat') as HTMLButtonElement;
-
-    // Auto-resize textarea
-    function autoResize() {
-      chatInput.style.height = 'auto';
-      chatInput.style.height = Math.min(chatInput.scrollHeight, 150) + 'px';
-    }
 
     chatInput.addEventListener('input', autoResize);
 
