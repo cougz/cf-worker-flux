@@ -3,6 +3,8 @@ import DashboardLayout from '../layouts/DashboardLayout.astro';
 import Sidebar from '../components/layout/Sidebar.astro';
 import Slider from '../components/interactive/Slider.astro';
 
+const currentOrigin = Astro.url.origin;
+
 const transformationPresets = [
   { id: 'resize', label: 'Resize 800×600' },
   { id: 'webp', label: 'Format to WebP' },
@@ -110,7 +112,7 @@ const transformationPresets = [
             <div class="panel-section">
               <h2>CDN URI</h2>
               <div class="url-display">
-                <code id="transformed-url-display">https://your-domain.com/cdn-cgi/image/width=800,height=600/source.jpg</code>
+                <code id="transformed-url-display">{currentOrigin}/cdn-cgi/image/width=800,height=600/source.jpg</code>
                 <button id="copy-uri" class="copy-btn">Copy</button>
               </div>
             </div>
@@ -431,7 +433,9 @@ const transformationPresets = [
   }
 </style>
 
-<script>
+<script define:vars={{ currentOrigin }}>
+  const origin = currentOrigin;
+
   // State
   let selectedPreset = 'width=800,height=600';
   let quality = 85;
@@ -500,7 +504,7 @@ const transformationPresets = [
   // Update preview and code
   function updatePreview() {
     const path = buildTransformUrl(selectedPreset);
-    transformedUrlDisplay.textContent = path;
+    transformedUrlDisplay.textContent = origin + path;
     transformedImage.src = path;
     htmlCode.textContent = `<img src="${path}" alt="Transformed Image" />`;
 
