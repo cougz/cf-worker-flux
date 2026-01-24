@@ -218,6 +218,8 @@ const testPrompts = [
     transition: all var(--transition-fast);
     white-space: nowrap;
     flex-shrink: 0;
+    margin-left: auto;
+    align-self: center;
   }
 
   .docs-link:hover {
@@ -784,31 +786,28 @@ const testPrompts = [
   // State
   let conversationHistory: ChatMessage[] = [];
   let isLoading = false;
-  let isInitialized = false;
-
-  // DOM Elements
-  let messagesContainer: HTMLDivElement;
-  let chatInput: HTMLTextAreaElement;
-  let sendButton: HTMLButtonElement;
-  let typingIndicator: HTMLDivElement;
-  let clearChatButton: HTMLButtonElement;
 
   function autoResize() {
+    const chatInput = document.getElementById('chat-input') as HTMLTextAreaElement;
     if (!chatInput) return;
     chatInput.style.height = 'auto';
     chatInput.style.height = Math.min(chatInput.scrollHeight, 150) + 'px';
   }
 
   function initChat() {
-    if (isInitialized) return;
-    isInitialized = true;
+    const chatContainer = document.querySelector('.chat-container');
+    if (!chatContainer) return;
+    if (chatContainer.dataset.initialized) return;
+    
+    chatContainer.dataset.initialized = 'true';
+    
     // DOM Elements
-    messagesContainer = document.getElementById('chat-messages') as HTMLDivElement;
-    chatInput = document.getElementById('chat-input') as HTMLTextAreaElement;
-    sendButton = document.getElementById('send-button') as HTMLButtonElement;
-    typingIndicator = document.getElementById('typing-indicator') as HTMLDivElement;
+    const messagesContainer = document.getElementById('chat-messages') as HTMLDivElement;
+    const chatInput = document.getElementById('chat-input') as HTMLTextAreaElement;
+    const sendButton = document.getElementById('send-button') as HTMLButtonElement;
+    const typingIndicator = document.getElementById('typing-indicator') as HTMLDivElement;
     const testPromptButtons = document.querySelectorAll('.test-prompt-button');
-    clearChatButton = document.getElementById('clear-chat') as HTMLButtonElement;
+    const clearChatButton = document.getElementById('clear-chat') as HTMLButtonElement;
 
     chatInput.addEventListener('input', autoResize);
 
@@ -854,119 +853,116 @@ const testPrompts = [
         }
       });
     }
-  }
+    
+    async function sendMessage() {
+      const prompt = chatInput.value.trim();
+      if (!prompt || isLoading) return;
 
-  // Add message to UI
-  function addMessage(role: 'user' | 'assistant' | 'error', content: string) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${role}`;
+      // Clear input
+      chatInput.value = '';
+      autoResize();
 
-    const labelDiv = document.createElement('div');
-    labelDiv.className = 'message-label';
-    if (role === 'error') {
-      labelDiv.innerHTML = '🚫 <strong>BLOCKED</strong>';
-    } else {
-      labelDiv.textContent = role === 'user' ? 'You' : 'Assistant';
-    }
+      // Add user message to UI
+      addMessage('user', prompt, messagesContainer);
 
-    const bubbleDiv = document.createElement('div');
-    bubbleDiv.className = 'message-bubble';
-    bubbleDiv.innerHTML = content.replace(/\n/g, '<br>');
+      // Add to history
+      conversationHistory.push({ role: 'user', content: prompt });
 
-    messageDiv.appendChild(labelDiv);
-    messageDiv.appendChild(bubbleDiv);
-    messagesContainer.appendChild(messageDiv);
+      // Show loading state
+      isLoading = true;
+      sendButton.disabled = true;
+      setTyping(true, typingIndicator, messagesContainer);
 
-    // Scroll to bottom
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  }
-
-  // Show/hide typing indicator
-  function setTyping(visible: boolean) {
-    if (visible) {
-      typingIndicator.classList.add('visible');
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    } else {
-      typingIndicator.classList.remove('visible');
-    }
-  }
-
-  // Send message to API
-  async function sendMessage() {
-    const prompt = chatInput.value.trim();
-    if (!prompt || isLoading) return;
-
-    // Clear input
-    chatInput.value = '';
-    autoResize();
-
-    // Add user message to UI
-    addMessage('user', prompt);
-
-    // Add to history
-    conversationHistory.push({ role: 'user', content: prompt });
-
-    // Show loading state
-    isLoading = true;
-    sendButton.disabled = true;
-    setTyping(true);
-
-    try {
-      const response = await fetch('/firewall-for-ai/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt,
-          history: conversationHistory.slice(0, -1), // Exclude current message (already in prompt)
-        }),
-      });
-
-      let data;
       try {
-        data = await response.json();
-      } catch (parseError) {
-        // JSON parse failed - likely got HTML from firewall
-        const errorMessage = 'The work is mysterious and important. Your inquiry contains data that requires refinement.';
-        addMessage('error', errorMessage);
-        conversationHistory.pop();
-        return;
-      }
+        const response = await fetch('/firewall-for-ai/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prompt,
+            history: conversationHistory.slice(0, -1), // Exclude current message (already in prompt)
+          }),
+        });
 
-      if (!response.ok || data.error) {
-        // Display error as assistant message
-        let errorMessage = data.error || `Request failed with status ${response.status}`;
-        
-        // Enhance firewall blocking errors with theming (short Severance style)
-        if (response.status === 403 || 
-            errorMessage.includes('security protocols') ||
-            errorMessage.includes('refinement') ||
-            errorMessage.includes('handbook')) {
-          // Keep the themed error message from the backend
-          errorMessage = errorMessage; // Use the backend's themed message
+        let data;
+        try {
+          data = await response.json();
+        } catch (parseError) {
+          // JSON parse failed - likely got HTML from firewall
+          const errorMessage = 'The work is mysterious and important. Your inquiry contains data that requires refinement.';
+          addMessage('error', errorMessage, messagesContainer);
+          conversationHistory.pop();
+          return;
         }
-        
-        addMessage('error', errorMessage);
+
+        if (!response.ok || data.error) {
+          // Display error as assistant message
+          let errorMessage = data.error || `Request failed with status ${response.status}`;
+          
+          // Enhance firewall blocking errors with theming (short Severance style)
+          if (response.status === 403 || 
+              errorMessage.includes('security protocols') ||
+              errorMessage.includes('refinement') ||
+              errorMessage.includes('handbook')) {
+            // Keep the themed error message from the backend
+            errorMessage = errorMessage; // Use the backend's themed message
+          }
+          
+          addMessage('error', errorMessage, messagesContainer);
+          // Remove failed user message from history
+          conversationHistory.pop();
+        } else {
+          // Add assistant response to UI and history
+          const assistantMessage = data.response;
+          addMessage('assistant', assistantMessage, messagesContainer);
+          conversationHistory.push({ role: 'assistant', content: assistantMessage });
+        }
+      } catch (error) {
+        // Network or parsing error
+        const errorMessage = error instanceof Error ? error.message : 'Failed to connect to the server';
+        addMessage('error', errorMessage, messagesContainer);
         // Remove failed user message from history
         conversationHistory.pop();
-      } else {
-        // Add assistant response to UI and history
-        const assistantMessage = data.response;
-        addMessage('assistant', assistantMessage);
-        conversationHistory.push({ role: 'assistant', content: assistantMessage });
+      } finally {
+        isLoading = false;
+        sendButton.disabled = false;
+        setTyping(false, typingIndicator, messagesContainer);
+        chatInput.focus();
       }
-    } catch (error) {
-      // Network or parsing error
-      const errorMessage = error instanceof Error ? error.message : 'Failed to connect to the server';
-      addMessage('error', errorMessage);
-      // Remove failed user message from history
-      conversationHistory.pop();
-    } finally {
-      isLoading = false;
-      sendButton.disabled = false;
-      setTyping(false);
-      chatInput.focus();
+    }
+    
+    function addMessage(role: 'user' | 'assistant' | 'error', content: string, container: HTMLDivElement) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${role}`;
+
+      const labelDiv = document.createElement('div');
+      labelDiv.className = 'message-label';
+      if (role === 'error') {
+        labelDiv.innerHTML = '🚫 <strong>BLOCKED</strong>';
+      } else {
+        labelDiv.textContent = role === 'user' ? 'You' : 'Assistant';
+      }
+
+      const bubbleDiv = document.createElement('div');
+      bubbleDiv.className = 'message-bubble';
+      bubbleDiv.innerHTML = content.replace(/\n/g, '<br>');
+
+      messageDiv.appendChild(labelDiv);
+      messageDiv.appendChild(bubbleDiv);
+      container.appendChild(messageDiv);
+
+      // Scroll to bottom
+      container.scrollTop = container.scrollHeight;
+    }
+    
+    function setTyping(visible: boolean, indicator: HTMLDivElement, container: HTMLDivElement) {
+      if (visible) {
+        indicator.classList.add('visible');
+        container.scrollTop = container.scrollHeight;
+      } else {
+        indicator.classList.remove('visible');
+      }
     }
   }
 
