@@ -42,17 +42,23 @@ const testPrompts = [
 ];
 ---
 
-<DashboardLayout title="Firewall for AI Demo" description="Chat with the Macrodata Refinement Assistant">
+<DashboardLayout title="Firewall for AI" description="Chat with the Macrodata Refinement Assistant">
   <div class="module-wrapper">
     <Sidebar />
     <div class="module-content-wrapper">
+      <div class="chat-demo">
+          <div class="panel-section">
+            <div class="header-content">
+              <h1>Firewall for AI</h1>
+            </div>
+          </div>
+      </div>
       <div class="chat-container">
         <!-- Header -->
         <div class="chat-header">
           <div class="chat-header-left">
             <div class="chat-header-text">
-              <h1>Firewall for AI Demo</h1>
-              <p>Macrodata Refinement Assistant</p>
+              <h1>Macrodata Refinement Assistant</h1>
               <div class="chat-header-meta">
                 <span class="clearance-badge">CLEARANCE: MDR-2</span>
                 <span class="status-indicator">
@@ -157,6 +163,12 @@ const testPrompts = [
 </DashboardLayout>
 
 <style>
+  .chat-demo {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
   .chat-container {
     display: flex;
     flex-direction: column;
