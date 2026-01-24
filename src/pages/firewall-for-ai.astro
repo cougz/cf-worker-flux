@@ -690,6 +690,7 @@ const testPrompts = [
   // State
   let conversationHistory: ChatMessage[] = [];
   let isLoading = false;
+  let isInitialized = false;
 
   // DOM Elements
   let messagesContainer: HTMLDivElement;
@@ -699,6 +700,8 @@ const testPrompts = [
   let clearChatButton: HTMLButtonElement;
 
   function initChat() {
+    if (isInitialized) return;
+    isInitialized = true;
     // DOM Elements
     messagesContainer = document.getElementById('chat-messages') as HTMLDivElement;
     chatInput = document.getElementById('chat-input') as HTMLTextAreaElement;

@@ -437,6 +437,7 @@ const transformationPresets = [
   // State
   let selectedPreset = 'width=800,height=600';
   let quality = 85;
+  let isInitialized = false;
 
   // DOM Elements
   let presetButtons: NodeListOf<Element>;
@@ -452,6 +453,8 @@ const transformationPresets = [
   let qualitySlider: HTMLInputElement;
 
   function initImages() {
+    if (isInitialized) return;
+    isInitialized = true;
     // DOM Elements
     presetButtons = document.querySelectorAll('[data-preset]');
     customOptionsInput = document.getElementById('custom-options') as HTMLTextAreaElement;
@@ -531,6 +534,12 @@ const transformationPresets = [
       // Fetch transformed image size
       fetchImageSize(path);
     }
+
+    // Handle image load error
+    transformedImage.addEventListener('error', () => {
+      transformedImage.src = '/source.jpg';
+      transformedSize.textContent = 'Image resizing not available';
+    });
 
     // Handle preset selection
     presetButtons.forEach((btn) => {
