@@ -49,8 +49,10 @@ const testPrompts = [
       <div class="chat-demo">
           <div class="panel-section">
             <div class="header-content">
-              <h1>Firewall for AI</h1>
-              <p>Test Cloudflare's AI-powered prompt filtering with real-time PII and unsafe content detection</p>
+              <div class="header-content-left">
+                <h1>Firewall for AI</h1>
+                <p>Test Cloudflare's AI-powered prompt filtering with real-time PII and unsafe content detection</p>
+              </div>
               <a href="https://developers.cloudflare.com/waf/detections/firewall-for-ai/" target="_blank" rel="noopener" class="docs-link">
                 📚 Documentation
               </a>
@@ -172,6 +174,56 @@ const testPrompts = [
     border: 2px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 24px;
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .header-content-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .header-content h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .header-content p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .docs-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--cf-orange);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .docs-link:hover {
+    background: var(--cf-orange-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
 
   .chat-demo {
@@ -617,6 +669,21 @@ const testPrompts = [
 
   /* Responsive */
   @media (max-width: 768px) {
+    .header-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .header-content-left {
+      width: 100%;
+    }
+
+    .docs-link {
+      width: 100%;
+      justify-content: center;
+    }
+
     .assistant-card-header {
       padding: 10px 16px;
       gap: 12px;
